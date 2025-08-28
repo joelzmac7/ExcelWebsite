@@ -1,0 +1,468 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for candidates, recruiters, and admins
+model User {
+  id                        String    @id @default(uuid())
+  email                     String    @unique
+  passwordHash              String
+  firstName                 String
+  lastName                  String
+  phone                     String?
+  role                      String    // 'candidate', 'recruiter', 'admin'
+  specialty                 String?
+  yearsExperience           Int?
+  preferredStates           String[]
+  preferredCities           String[]
+  preferredPayRangeMin      Float?
+  preferredPayRangeMax      Float?
+  preferredShiftType        String?
+  licenseStates             String[]
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
+  lastLogin                 DateTime?
+  isActive                  Boolean   @default(true)
+  emailVerified             Boolean   @default(false)
+  phoneVerified             Boolean   @default(false)
+  profileCompletionPercentage Int      @default(0)
+  avatarUrl                 String?
+  referralCode              String?   @unique
+  referredById              String?
+  referredBy                User?     @relation("UserReferrals", fields: [referredById], references: [id])
+  referrals                 User[]    @relation("UserReferrals")
+  externalId                String?
+  metadata                  Json?
+
+  // Relations
+  jobs                      Job[]     @relation("RecruiterJobs")
+  applications              Application[] @relation("CandidateApplications")
+  licenses                  License[]
+  certifications            Certification[]
+  workExperiences           WorkExperience[]
+  notifications             Notification[]
+  jobAlerts                 JobAlert[]
+  savedJobs                 SavedJob[]
+  referralsGiven            Referral[] @relation("ReferrerRelation")
+  referralsReceived         Referral[] @relation("ReferredRelation")
+  authoredContent           Content[]
+}
+
+// Job model for job listings
+model Job {
+  id                  String    @id @default(uuid())
+  externalId          String    @unique
+  title               String
+  specialty           String
+  facilityName        String
+  facilityId          String?
+  facility            Facility? @relation(fields: [facilityId], references: [id])
+  city                String
+  state               String
+  zipCode             String?
+  latitude            Float?
+  longitude           Float?
+  startDate           DateTime?
+  endDate             DateTime?
+  weeklyHours         Int
+  shiftDetails        String
+  shiftType           String?
+  payRate             Float
+  housingStipend      Float?
+  requirements        String
+  benefits            String
+  description         String
+  status              String    // 'active', 'filled', 'expired', 'draft'
+  isFeatured          Boolean   @default(false)
+  isUrgent            Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  recruiterId         String?
+  recruiter           User?     @relation("RecruiterJobs", fields: [recruiterId], references: [id])
+  viewsCount          Int       @default(0)
+  applicationsCount   Int       @default(0)
+  seoTitle            String?
+  seoDescription      String?
+  seoKeywords         String[]
+  parsedRequirements  Json?
+  parsedShift         Json?
+  metadata            Json?
+
+  // Relations
+  applications        Application[]
+  savedBy             SavedJob[]
+
+  // Indexes
+  @@index([specialty])
+  @@index([state, city])
+  @@index([status])
+  @@index([startDate])
+  @@index([recruiterId])
+  @@index([isFeatured])
+  @@index([isUrgent])
+}
+
+// Facility model for healthcare facilities
+model Facility {
+  id                  String    @id @default(uuid())
+  externalId          String    @unique
+  name                String
+  type                String
+  address             String
+  city                String
+  state               String
+  zipCode             String
+  latitude            Float?
+  longitude           Float?
+  phone               String?
+  website             String?
+  description         String
+  bedCount            Int?
+  traumaLevel         String?
+  specialties         String[]
+  imageUrl            String?
+  rating              Float?
+  isTeachingHospital  Boolean?
+  isMagnetDesignated  Boolean?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  metadata            Json?
+
+  // Relations
+  jobs                Job[]
+
+  // Indexes
+  @@index([state, city])
+  @@index([type])
+  @@index([name])
+}
+
+// Application model for job applications
+model Application {
+  id                  String    @id @default(uuid())
+  jobId               String
+  job                 Job       @relation(fields: [jobId], references: [id])
+  candidateId         String
+  candidate           User      @relation("CandidateApplications", fields: [candidateId], references: [id])
+  resumeId            String?
+  status              String    // 'submitted', 'reviewing', 'interview', 'offered', 'placed', 'rejected', 'withdrawn'
+  applicationDate     DateTime  @default(now())
+  lastStatusChange    DateTime  @default(now())
+  recruiterNotes      String?
+  candidateNotes      String?
+  source              String    @default("direct")
+  referralId          String?
+  referral            Referral? @relation(fields: [referralId], references: [id])
+  matchScore          Float?
+  interviewDate       DateTime?
+  offerDetails        Json?
+  rejectionReason     String?
+  externalId          String?
+  metadata            Json?
+
+  // Indexes
+  @@index([jobId])
+  @@index([candidateId])
+  @@index([status])
+  @@index([applicationDate])
+  @@index([referralId])
+  @@unique([jobId, candidateId])
+}
+
+// License model for healthcare licenses
+model License {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+  licenseType         String
+  licenseNumber       String
+  state               String
+  issueDate           DateTime
+  expirationDate      DateTime
+  status              String    // 'active', 'expired', 'pending', 'verified'
+  verificationDate    DateTime?
+  verificationMethod  String?
+  documentUrl         String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  externalId          String?
+  metadata            Json?
+
+  // Indexes
+  @@index([userId])
+  @@index([state])
+  @@index([expirationDate])
+  @@index([status])
+  @@unique([userId, licenseType, state])
+}
+
+// Certification model for healthcare certifications
+model Certification {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+  certificationName   String
+  issuingOrganization String
+  issueDate           DateTime
+  expirationDate      DateTime?
+  credentialId        String?
+  documentUrl         String?
+  status              String    // 'active', 'expired', 'pending', 'verified'
+  verificationDate    DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  metadata            Json?
+
+  // Indexes
+  @@index([userId])
+  @@index([certificationName])
+  @@index([expirationDate])
+  @@index([status])
+  @@unique([userId, certificationName, issuingOrganization])
+}
+
+// WorkExperience model for work history
+model WorkExperience {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+  employer            String
+  position            String
+  startDate           DateTime
+  endDate             DateTime?
+  isCurrent           Boolean   @default(false)
+  city                String?
+  state               String?
+  responsibilities    String?
+  specialty           String?
+  facilityType        String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  metadata            Json?
+
+  // Indexes
+  @@index([userId])
+  @@index([specialty])
+  @@index([startDate, endDate])
+}
+
+// City model for city information
+model City {
+  id                  String    @id @default(uuid())
+  name                String
+  state               String
+  stateName           String
+  zipCodes            String[]
+  latitude            Float?
+  longitude           Float?
+  population          Int?
+  costOfLivingIndex   Float?
+  housingCostIndex    Float?
+  healthcareFacilitiesCount Int?
+  topEmployers        String[]
+  climateDescription  String?
+  publicTransportRating Int?
+  walkabilityScore    Int?
+  crimeRateIndex      Float?
+  hasCityGuide        Boolean   @default(false)
+  cityGuideUrl        String?
+  featuredImageUrl    String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  metadata            Json?
+
+  // Relations
+  content             Content[] @relation("CityContent")
+
+  // Indexes
+  @@index([state, name])
+  @@index([hasCityGuide])
+  @@unique([name, state])
+}
+
+// Specialty model for healthcare specialties
+model Specialty {
+  id                  String    @id @default(uuid())
+  name                String    @unique
+  category            String
+  description         String?
+  requiredCertifications String[]
+  averagePayRate      Float?
+  demandLevel         Int?
+  featuredImageUrl    String?
+  hasSpecialtyGuide   Boolean   @default(false)
+  specialtyGuideUrl   String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  metadata            Json?
+
+  // Relations
+  content             Content[] @relation("SpecialtyContent")
+
+  // Indexes
+  @@index([category])
+  @@index([demandLevel])
+  @@index([hasSpecialtyGuide])
+}
+
+// Notification model for user notifications
+model Notification {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+  type                String
+  title               String
+  message             String
+  isRead              Boolean   @default(false)
+  actionUrl           String?
+  createdAt           DateTime  @default(now())
+  readAt              DateTime?
+  expiresAt           DateTime?
+  metadata            Json?
+
+  // Indexes
+  @@index([userId])
+  @@index([isRead])
+  @@index([type])
+  @@index([createdAt])
+}
+
+// JobAlert model for job alerts
+model JobAlert {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+  name                String
+  specialties         String[]
+  states              String[]
+  cities              String[]
+  minPayRate          Float?
+  shiftTypes          String[]
+  frequency           String    // 'daily', 'weekly', 'instant'
+  isActive            Boolean   @default(true)
+  lastSentAt          DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  metadata            Json?
+
+  // Indexes
+  @@index([userId])
+  @@index([isActive])
+  @@index([frequency])
+}
+
+// SavedJob model for saved/favorited jobs
+model SavedJob {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+  jobId               String
+  job                 Job       @relation(fields: [jobId], references: [id])
+  createdAt           DateTime  @default(now())
+  notes               String?
+
+  // Indexes
+  @@index([userId])
+  @@index([jobId])
+  @@unique([userId, jobId])
+}
+
+// Referral model for referrals
+model Referral {
+  id                  String    @id @default(uuid())
+  referrerId          String
+  referrer            User      @relation("ReferrerRelation", fields: [referrerId], references: [id])
+  referredEmail       String
+  referredName        String?
+  referredPhone       String?
+  status              String    // 'invited', 'registered', 'applied', 'placed'
+  invitationDate      DateTime  @default(now())
+  registrationDate    DateTime?
+  referredUserId      String?
+  referredUser        User?     @relation("ReferredRelation", fields: [referredUserId], references: [id])
+  jobId               String?
+  bonusAmount         Float?
+  bonusStatus         String?   // 'pending', 'approved', 'paid', 'denied'
+  bonusPaidDate       DateTime?
+  notes               String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  metadata            Json?
+
+  // Relations
+  applications        Application[]
+
+  // Indexes
+  @@index([referrerId])
+  @@index([referredUserId])
+  @@index([status])
+  @@index([bonusStatus])
+  @@unique([referrerId, referredEmail])
+}
+
+// Content model for various content types
+model Content {
+  id                  String    @id @default(uuid())
+  type                String    // 'city_guide', 'specialty_guide', 'blog', 'faq', 'testimonial', 'page'
+  title               String
+  slug                String    @unique
+  summary             String?
+  contentJson         Json
+  authorId            String?
+  author              User?     @relation(fields: [authorId], references: [id])
+  publishedAt         DateTime?
+  isPublished         Boolean   @default(false)
+  featuredImageUrl    String?
+  seoTitle            String?
+  seoDescription      String?
+  seoKeywords         String[]
+  relatedCityId       String?
+  relatedCity         City?     @relation("CityContent", fields: [relatedCityId], references: [id])
+  relatedSpecialtyId  String?
+  relatedSpecialty    Specialty? @relation("SpecialtyContent", fields: [relatedSpecialtyId], references: [id])
+  viewCount           Int       @default(0)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  metadata            Json?
+
+  // Indexes
+  @@index([type])
+  @@index([slug])
+  @@index([isPublished, publishedAt])
+  @@index([relatedCityId])
+  @@index([relatedSpecialtyId])
+}
+
+// AnalyticsEvent model for tracking user interactions
+model AnalyticsEvent {
+  id                  String    @id @default(uuid())
+  eventType           String
+  userId              String?
+  sessionId           String?
+  jobId               String?
+  applicationId       String?
+  contentId           String?
+  referralId          String?
+  pageUrl             String?
+  referrerUrl         String?
+  userAgent           String?
+  ipAddress           String?
+  deviceType          String?
+  eventData           Json?
+  createdAt           DateTime  @default(now())
+
+  // Indexes
+  @@index([eventType])
+  @@index([userId])
+  @@index([jobId])
+  @@index([createdAt])
+  @@index([sessionId])
+}

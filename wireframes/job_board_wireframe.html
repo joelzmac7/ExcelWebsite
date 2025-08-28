@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Medical Staffing - Job Board</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .logo span {
+            color: #3498db;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #3498db;
+        }
+        
+        .cta-button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .cta-button:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Page Title */
+        .page-title {
+            background-color: #2c3e50;
+            color: white;
+            padding: 40px 0;
+        }
+        
+        .page-title h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumbs {
+            color: #bdc3c7;
+        }
+        
+        .breadcrumbs a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            gap: 30px;
+            padding: 40px 0;
+        }
+        
+        /* Filters Sidebar */
+        .filters-sidebar {
+            width: 300px;
+            flex-shrink: 0;
+        }
+        
+        .filter-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-card h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        
+        .filter-group {
+            margin-bottom: 15px;
+        }
+        
+        .filter-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .filter-group select,
+        .filter-group input[type="text"],
+        .filter-group input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .filter-group .range-inputs {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .filter-group .range-inputs input {
+            width: 50%;
+        }
+        
+        .checkbox-group {
+            margin-bottom: 10px;
+        }
+        
+        .checkbox-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .filter-buttons button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .apply-filters {
+            background-color: #3498db;
+            color: white;
+            flex: 2;
+        }
+        
+        .apply-filters:hover {
+            background-color: #2980b9;
+        }
+        
+        .reset-filters {
+            background-color: #f1f1f1;
+            color: #7f8c8d;
+            flex: 1;
+        }
+        
+        .reset-filters:hover {
+            background-color: #e0e0e0;
+        }
+        
+        /* Jobs List */
+        .jobs-list {
+            flex: 1;
+        }
+        
+        .jobs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .jobs-count {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .jobs-sort {
+            display: flex;
+            align-items: center;
+        }
+        
+        .jobs-sort label {
+            margin-right: 10px;
+            color: #7f8c8d;
+        }
+        
+        .jobs-sort select {
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .job-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .job-card-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .job-title-section h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .job-company {
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .job-location {
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+        }
+        
+        .job-location i {
+            margin-right: 5px;
+            color: #3498db;
+        }
+        
+        .job-type-badge {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            height: fit-content;
+        }
+        
+        .job-card-body {
+            margin-bottom: 15px;
+        }
+        
+        .job-highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .job-highlight {
+            background-color: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+        }
+        
+        .job-highlight i {
+            margin-right: 5px;
+            color: #3498db;
+        }
+        
+        .job-description {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .job-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #f1f1f1;
+        }
+        
+        .job-salary {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .job-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .job-action-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .job-apply-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .job-apply-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .job-save-btn {
+            background-color: #f1f1f1;
+            color: #7f8c8d;
+        }
+        
+        .job-save-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .hot-job-badge {
+            background-color: #ff5722;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .pagination-list {
+            display: flex;
+            list-style: none;
+        }
+        
+        .pagination-item {
+            margin: 0 5px;
+        }
+        
+        .pagination-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .pagination-link.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .pagination-link:not(.active) {
+            background-color: #f1f1f1;
+            color: #7f8c8d;
+        }
+        
+        .pagination-link:hover:not(.active) {
+            background-color: #e0e0e0;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #3498db;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #3498db;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .social-link:hover {
+            background-color: #3498db;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .filters-sidebar {
+                width: 100%;
+                margin-bottom: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 20px 0;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 10px 15px;
+            }
+            
+            .job-card-header {
+                flex-direction: column;
+            }
+            
+            .job-type-badge {
+                align-self: flex-start;
+                margin-top: 10px;
+            }
+            
+            .job-card-footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .job-actions {
+                width: 100%;
+            }
+            
+            .job-action-btn {
+                flex: 1;
+                text-align: center;
+            }
+        }
+        
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #3498db;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            z-index: 1000;
+        }
+        
+        .ai-assistant:hover {
+            transform: scale(1.1);
+            background-color: #2980b9;
+        }
+        
+        /* Schema.org Markup */
+        .job-schema {
+            display: none;
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Excel <span>Medical Staffing</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Jobs</a></li>
+                    <li><a href="#">Locations</a></li>
+                    <li><a href="#">Specialties</a></li>
+                    <li><a href="#">Resources</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#" class="cta-button">Apply Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Title -->
+    <section class="page-title">
+        <div class="container">
+            <h1>Healthcare Jobs</h1>
+            <div class="breadcrumbs">
+                <a href="#">Home</a> > Healthcare Jobs
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Filters Sidebar -->
+        <aside class="filters-sidebar">
+            <!-- Job Type Filter -->
+            <div class="filter-card">
+                <h3>Job Type</h3>
+                <div class="filter-group">
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" name="job_type" value="travel"> Travel
+                        </label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" name="job_type" value="permanent"> Permanent
+                        </label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" name="job_type" value="per_diem"> Per Diem
+                        </label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" name="job_type" value="local"> Local
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Specialty Filter -->
+            <div class="filter-card">
+                <h3>Specialty</h3>
+                <div class="filter-group">
+                    <select name="specialty">
+                        <option value="">All Specialties</option>
+                        <option value="rn_er">RN - Emergency Room</option>
+                        <option value="rn_icu">RN - ICU</option>
+                        <option value="rn_med_surg">RN - Med/Surg</option>
+                        <option value="rn_or">RN - Operating Room</option>
+                        <option value="rn_l_d">RN - Labor & Delivery</option>
+                        <option value="pt">Physical Therapist</option>
+                        <option value="ot">Occupational Therapist</option>
+                        <option value="slp">Speech Language Pathologist</option>
+                        <option value="rt">Respiratory Therapist</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Location Filter -->
+            <div class="filter-card">
+                <h3>Location</h3>
+                <div class="filter-group">
+                    <label>State</label>
+                    <select name="state">
+                        <option value="">All States</option>
+                        <option value="ca">California</option>
+                        <option value="tx">Texas</option>
+                        <option value="fl">Florida</option>
+                        <option value="ny">New York</option>
+                        <option value="il">Illinois</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>City</label>
+                    <input type="text" name="city" placeholder="Enter city name">
+                </div>
+            </div>
+            
+            <!-- Salary Filter -->
+            <div class="filter-card">
+                <h3>Salary Range</h3>
+                <div class="filter-group">
+                    <label>Weekly Pay (Travel)</label>
+                    <div class="range-inputs">
+                        <input type="number" name="min_salary" placeholder="Min">
+                        <input type="number" name="max_salary" placeholder="Max">
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label>Annual Salary (Permanent)</label>
+                    <div class="range-inputs">
+                        <input type="number" name="min_annual" placeholder="Min">
+                        <input type="number" name="max_annual" placeholder="Max">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Filters -->
+            <div class="filter-card">
+                <h3>Additional Filters</h3>
+                <div class="filter-group">
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" name="hot_jobs" value="1"> Hot Jobs Only
+                        </label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" name="sign_on_bonus" value="1"> Sign-on Bonus
+                        </label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" name="housing_stipend" value="1"> Housing Stipend
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button class="apply-filters">Apply Filters</button>
+                <button class="reset-filters">Reset</button>
+            </div>
+        </aside>
+        
+        <!-- Jobs List -->
+        <div class="jobs-list">
+            <div class="jobs-header">
+                <div class="jobs-count">245 Jobs Found</div>
+                <div class="jobs-sort">
+                    <label>Sort by:</label>
+                    <select name="sort">
+                        <option value="relevance">Relevance</option>
+                        <option value="date">Date Posted</option>
+                        <option value="salary_high">Salary (High to Low)</option>
+                        <option value="salary_low">Salary (Low to High)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Job Card 1 -->
+            <div class="job-card">
+                <!-- Schema.org markup for Job Posting -->
+                <div class="job-schema" itemscope itemtype="http://schema.org/JobPosting">
+                    <meta itemprop="datePosted" content="2025-08-20">
+                    <meta itemprop="validThrough" content="2025-11-20">
+                    <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+                        <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                            <meta itemprop="addressLocality" content="San Francisco">
+                            <meta itemprop="addressRegion" content="CA">
+                            <meta itemprop="addressCountry" content="US">
+                        </span>
+                    </span>
+                    <span itemprop="employmentType">CONTRACTOR</span>
+                    <span itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+                        <meta itemprop="name" content="Memorial Hospital">
+                    </span>
+                    <meta itemprop="description" content="ICU Registered Nurse needed for a 13-week travel assignment in San Francisco, CA. The ideal candidate will have at least 2 years of ICU experience and active CA license.">
+                    <span itemprop="baseSalary" itemscope itemtype="http://schema.org/MonetaryAmount">
+                        <meta itemprop="currency" content="USD">
+                        <span itemprop="value" itemscope itemtype="http://schema.org/QuantitativeValue">
+                            <meta itemprop="minValue" content="2800">
+                            <meta itemprop="maxValue" content="3200">
+                            <meta itemprop="unitText" content="WEEK">
+                        </span>
+                    </span>
+                </div>
+                
+                <div class="job-card-header">
+                    <div class="job-title-section">
+                        <h2>ICU Registered Nurse</h2>
+                        <div class="job-company">Memorial Hospital</div>
+                        <div class="job-location">
+                            <i>📍</i> San Francisco, California
+                        </div>
+                    </div>
+                    <div class="job-type-badge">Travel <span class="hot-job-badge">Hot Job</span></div>
+                </div>
+                <div class="job-card-body">
+                    <div class="job-highlights">
+                        <div class="job-highlight">
+                            <i>⏱️</i> 13 Week Assignment
+                        </div>
+                        <div class="job-highlight">
+                            <i>📅</i> Start ASAP
+                        </div>
+                        <div class="job-highlight">
+                            <i>🏥</i> Level I Trauma Center
+                        </div>
+                        <div class="job-highlight">
+                            <i>🔄</i> 3x12 Shifts
+                        </div>
+                    </div>
+                    <div class="job-description">
+                        ICU Registered Nurse needed for a 13-week travel assignment in San Francisco, CA. The ideal candidate will have at least 2 years of ICU experience and active CA license. This position is at a prestigious Level I Trauma Center with state-of-the-art facilities. Housing stipend and travel reimbursement included.
+                    </div>
+                </div>
+                <div class="job-card-footer">
+                    <div class="job-salary">$2,800 - $3,200/week</div>
+                    <div class="job-actions">
+                        <a href="#" class="job-action-btn job-apply-btn">Apply Now</a>
+                        <a href="#" class="job-action-btn job-save-btn">Save</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job Card 2 -->
+            <div class="job-card">
+                <!-- Schema.org markup for Job Posting -->
+                <div class="job-schema" itemscope itemtype="http://schema.org/JobPosting">
+                    <meta itemprop="datePosted" content="2025-08-22">
+                    <meta itemprop="validThrough" content="2025-11-22">
+                    <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+                        <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                            <meta itemprop="addressLocality" content="Houston">
+                            <meta itemprop="addressRegion" content="TX">
+                            <meta itemprop="addressCountry" content="US">
+                        </span>
+                    </span>
+                    <span itemprop="employmentType">CONTRACTOR</span>
+                    <span itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+                        <meta itemprop="name" content="Texas Medical Center">
+                    </span>
+                    <meta itemprop="description" content="ER Registered Nurse needed for an 8-week travel assignment in Houston, TX. The position requires a minimum of 2 years of ER experience and active TX license or compact license.">
+                    <span itemprop="baseSalary" itemscope itemtype="http://schema.org/MonetaryAmount">
+                        <meta itemprop="currency" content="USD">
+                        <span itemprop="value" itemscope itemtype="http://schema.org/QuantitativeValue">
+                            <meta itemprop="minValue" content="3000">
+                            <meta itemprop="maxValue" content="3500">
+                            <meta itemprop="unitText" content="WEEK">
+                        </span>
+                    </span>
+                </div>
+                
+                <div class="job-card-header">
+                    <div class="job-title-section">
+                        <h2>ER Registered Nurse</h2>
+                        <div class="job-company">Texas Medical Center</div>
+                        <div class="job-location">
+                            <i>📍</i> Houston, Texas
+                        </div>
+                    </div>
+                    <div class="job-type-badge">Travel <span class="hot-job-badge">Hot Job</span></div>
+                </div>
+                <div class="job-card-body">
+                    <div class="job-highlights">
+                        <div class="job-highlight">
+                            <i>⏱️</i> 8 Week Assignment
+                        </div>
+                        <div class="job-highlight">
+                            <i>📅</i> Start Sep 15, 2025
+                        </div>
+                        <div class="job-highlight">
+                            <i>💰</i> $3,000 Sign-on Bonus
+                        </div>
+                        <div class="job-highlight">
+                            <i>🔄</i> 4x10 Shifts
+                        </div>
+                    </div>
+                    <div class="job-description">
+                        ER Registered Nurse needed for an 8-week travel assignment in Houston, TX. The position requires a minimum of 2 years of ER experience and active TX license or compact license. This prestigious facility offers a $3,000 sign-on bonus and comprehensive benefits package including housing stipend and travel reimbursement.
+                    </div>
+                </div>
+                <div class="job-card-footer">
+                    <div class="job-salary">$3,000 - $3,500/week</div>
+                    <div class="job-actions">
+                        <a href="#" class="job-action-btn job-apply-btn">Apply Now</a>
+                        <a href="#" class="job-action-btn job-save-btn">Save</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job Card 3 -->
+            <div class="job-card">
+                <!-- Schema.org markup for Job Posting -->
+                <div class="job-schema" itemscope itemtype="http://schema.org/JobPosting">
+                    <meta itemprop="datePosted" content="2025-08-21">
+                    <meta itemprop="validThrough" content="2025-11-21">
+                    <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+                        <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                            <meta itemprop="addressLocality" content="Chicago">
+                            <meta itemprop="addressRegion" content="IL">
+                            <meta itemprop="addressCountry" content="US">
+                        </span>
+                    </span>
+                    <span itemprop="employmentType">FULL_TIME</span>
+                    <span itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+                        <meta itemprop="name" content="Chicago Rehabilitation Center">
+                    </span>
+                    <meta itemprop="description" content="Physical Therapist needed for a permanent position at a leading rehabilitation center in Chicago, IL. The ideal candidate will have 3+ years of experience and be licensed in Illinois.">
+                    <span itemprop="baseSalary" itemscope itemtype="http://schema.org/MonetaryAmount">
+                        <meta itemprop="currency" content="USD">
+                        <span itemprop="value" itemscope itemtype="http://schema.org/QuantitativeValue">
+                            <meta itemprop="minValue" content="85000">
+                            <meta itemprop="maxValue" content="95000">
+                            <meta itemprop="unitText" content="YEAR">
+                        </span>
+                    </span>
+                </div>
+                
+                <div class="job-card-header">
+                    <div class="job-title-section">
+                        <h2>Physical Therapist</h2>
+                        <div class="job-company">Chicago Rehabilitation Center</div>
+                        <div class="job-location">
+                            <i>📍</i> Chicago, Illinois
+                        </div>
+                    </div>
+                    <div class="job-type-badge">Permanent</div>
+                </div>
+                <div class="job-card-body">
+                    <div class="job-highlights">
+                        <div class="job-highlight">
+                            <i>⏱️</i> Full-Time
+                        </div>
+                        <div class="job-highlight">
+                            <i>📅</i> Immediate Start
+                        </div>
+                        <div class="job-highlight">
+                            <i>🏠</i> Relocation Assistance
+                        </div>
+                        <div class="job-highlight">
+                            <i>🔄</i> Monday-Friday
+                        </div>
+                    </div>
+                    <div class="job-description">
+                        Physical Therapist needed for a permanent position at a leading rehabilitation center in Chicago, IL. The ideal candidate will have 3+ years of experience and be licensed in Illinois. Our facility offers a collaborative work environment, competitive salary, comprehensive benefits package, and relocation assistance.
+                    </div>
+                </div>
+                <div class="job-card-footer">
+                    <div class="job-salary">$85,000 - $95,000/year</div>
+                    <div class="job-actions">
+                        <a href="#" class="job-action-btn job-apply-btn">Apply Now</a>
+                        <a href="#" class="job-action-btn job-save-btn">Save</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job Card 4 -->
+            <div class="job-card">
+                <!-- Schema.org markup for Job Posting -->
+                <div class="job-schema" itemscope itemtype="http://schema.org/JobPosting">
+                    <meta itemprop="datePosted" content="2025-08-19">
+                    <meta itemprop="validThrough" content="2025-11-19">
+                    <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+                        <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                            <meta itemprop="addressLocality" content="Miami">
+                            <meta itemprop="addressRegion" content="FL">
+                            <meta itemprop="addressCountry" content="US">
+                        </span>
+                    </span>
+                    <span itemprop="employmentType">CONTRACTOR</span>
+                    <span itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+                        <meta itemprop="name" content="Miami General Hospital">
+                    </span>
+                    <meta itemprop="description" content="Labor & Delivery RN needed for a 13-week travel assignment in Miami, FL. The position requires a minimum of 2 years of L&D experience and active FL license or compact license.">
+                    <span itemprop="baseSalary" itemscope itemtype="http://schema.org/MonetaryAmount">
+                        <meta itemprop="currency" content="USD">
+                        <span itemprop="value" itemscope itemtype="http://schema.org/QuantitativeValue">
+                            <meta itemprop="minValue" content="2600">
+                            <meta itemprop="maxValue" content="3000">
+                            <meta itemprop="unitText" content="WEEK">
+                        </span>
+                    </span>
+                </div>
+                
+                <div class="job-card-header">
+                    <div class="job-title-section">
+                        <h2>Labor & Delivery RN</h2>
+                        <div class="job-company">Miami General Hospital</div>
+                        <div class="job-location">
+                            <i>📍</i> Miami, Florida
+                        </div>
+                    </div>
+                    <div class="job-type-badge">Travel</div>
+                </div>
+                <div class="job-card-body">
+                    <div class="job-highlights">
+                        <div class="job-highlight">
+                            <i>⏱️</i> 13 Week Assignment
+                        </div>
+                        <div class="job-highlight">
+                            <i>📅</i> Start Oct 1, 2025
+                        </div>
+                        <div class="job-highlight">
+                            <i>🏥</i> Level III NICU
+                        </div>
+                        <div class="job-highlight">
+                            <i>🔄</i> 3x12 Shifts
+                        </div>
+                    </div>
+                    <div class="job-description">
+                        Labor & Delivery RN needed for a 13-week travel assignment in Miami, FL. The position requires a minimum of 2 years of L&D experience and active FL license or compact license. This facility features a Level III NICU and state-of-the-art maternity ward. Housing stipend and travel reimbursement included.
+                    </div>
+                </div>
+                <div class="job-card-footer">
+                    <div class="job-salary">$2,600 - $3,000/week</div>
+                    <div class="job-actions">
+                        <a href="#" class="job-action-btn job-apply-btn">Apply Now</a>
+                        <a href="#" class="job-action-btn job-save-btn">Save</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job Card 5 -->
+            <div class="job-card">
+                <!-- Schema.org markup for Job Posting -->
+                <div class="job-schema" itemscope itemtype="http://schema.org/JobPosting">
+                    <meta itemprop="datePosted" content="2025-08-18">
+                    <meta itemprop="validThrough" content="2025-11-18">
+                    <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+                        <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                            <meta itemprop="addressLocality" content="Seattle">
+                            <meta itemprop="addressRegion" content="WA">
+                            <meta itemprop="addressCountry" content="US">
+                        </span>
+                    </span>
+                    <span itemprop="employmentType">FULL_TIME</span>
+                    <span itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+                        <meta itemprop="name" content="Seattle Children's Hospital">
+                    </span>
+                    <meta itemprop="description" content="Speech Language Pathologist needed for a permanent position at Seattle Children's Hospital. The ideal candidate will have pediatric experience and be licensed in Washington state.">
+                    <span itemprop="baseSalary" itemscope itemtype="http://schema.org/MonetaryAmount">
+                        <meta itemprop="currency" content="USD">
+                        <span itemprop="value" itemscope itemtype="http://schema.org/QuantitativeValue">
+                            <meta itemprop="minValue" content="80000">
+                            <meta itemprop="maxValue" content="90000">
+                            <meta itemprop="unitText" content="YEAR">
+                        </span>
+                    </span>
+                </div>
+                
+                <div class="job-card-header">
+                    <div class="job-title-section">
+                        <h2>Speech Language Pathologist</h2>
+                        <div class="job-company">Seattle Children's Hospital</div>
+                        <div class="job-location">
+                            <i>📍</i> Seattle, Washington
+                        </div>
+                    </div>
+                    <div class="job-type-badge">Permanent</div>
+                </div>
+                <div class="job-card-body">
+                    <div class="job-highlights">
+                        <div class="job-highlight">
+                            <i>⏱️</i> Full-Time
+                        </div>
+                        <div class="job-highlight">
+                            <i>📅</i> Start Oct 15, 2025
+                        </div>
+                        <div class="job-highlight">
+                            <i>🏥</i> Pediatric Setting
+                        </div>
+                        <div class="job-highlight">
+                            <i>🔄</i> Monday-Friday
+                        </div>
+                    </div>
+                    <div class="job-description">
+                        Speech Language Pathologist needed for a permanent position at Seattle Children's Hospital. The ideal candidate will have pediatric experience and be licensed in Washington state. Our facility offers a collaborative work environment, competitive salary, comprehensive benefits package, and professional development opportunities.
+                    </div>
+                </div>
+                <div class="job-card-footer">
+                    <div class="job-salary">$80,000 - $90,000/year</div>
+                    <div class="job-actions">
+                        <a href="#" class="job-action-btn job-apply-btn">Apply Now</a>
+                        <a href="#" class="job-action-btn job-save-btn">Save</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination">
+                <ul class="pagination-list">
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">«</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link active">1</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">2</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">3</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">4</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">5</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">»</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Column 1 -->
+                <div class="footer-column">
+                    <h3>Excel Medical Staffing</h3>
+                    <p>Connecting healthcare professionals with their ideal positions since 2015. Veteran-owned and committed to excellence.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">f</a>
+                        <a href="#" class="social-link">t</a>
+                        <a href="#" class="social-link">in</a>
+                        <a href="#" class="social-link">ig</a>
+                    </div>
+                </div>
+                
+                <!-- Column 2 -->
+                <div class="footer-column">
+                    <h3>For Healthcare Professionals</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Browse Jobs</a></li>
+                        <li><a href="#">Travel Nursing</a></li>
+                        <li><a href="#">Allied Health</a></li>
+                        <li><a href="#">Permanent Placement</a></li>
+                        <li><a href="#">Clinical Trials</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Salary Calculator</a></li>
+                        <li><a href="#">Licensing Guides</a></li>
+                        <li><a href="#">City Guides</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Our Team</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Excel Medical Staffing. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Assistant Button -->
+    <div class="ai-assistant">
+        💬
+    </div>
+</body>
+</html>

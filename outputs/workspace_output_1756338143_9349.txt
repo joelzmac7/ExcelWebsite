@@ -1,0 +1,14 @@
+total 12
+drwxr-xr-x 10 root root  174 Aug 27 23:17 .
+drwxr-xr-x  7 root root   81 Aug 27 17:08 ..
+-rw-r--r--  1 root root 1002 Aug 27 23:17 .env
+-rw-r--r--  1 root root  255 Aug 27 17:42 Dockerfile.dev
+drwxr-xr-x  4 root root   39 Aug 27 23:06 api
+drwxr-xr-x  2 root root   51 Aug 27 17:34 models
+-rw-r--r--  1 root root 1834 Aug 27 17:43 package.json
+drwxr-xr-x  3 root root   60 Aug 27 23:20 prisma
+drwxr-xr-x  2 root root   61 Aug 27 17:38 repositories
+drwxr-xr-x  2 root root   95 Aug 27 23:05 scripts
+drwxr-xr-x  5 root root   52 Aug 27 23:21 services
+drwxr-xr-x  4 root root   49 Aug 27 17:51 src
+drwxr-xr-x  2 root root   83 Aug 27 17:36 utils

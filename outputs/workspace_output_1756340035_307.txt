@@ -1,0 +1,7 @@
+total 0
+drwxr-xr-x 6 root root  69 Aug 27 23:54 .
+drwxr-xr-x 7 root root  81 Aug 27 17:08 ..
+drwxr-xr-x 2 root root   6 Aug 27 17:08 ci-cd
+drwxr-xr-x 2 root root   6 Aug 27 17:08 kubernetes
+drwxr-xr-x 2 root root 125 Aug 27 23:55 scripts
+drwxr-xr-x 2 root root   6 Aug 27 17:08 terraform

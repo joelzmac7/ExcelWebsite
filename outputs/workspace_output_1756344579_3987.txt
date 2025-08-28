@@ -1,0 +1,50 @@
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import Link from 'next/link';
+import { formatDistanceToNow, format } from 'date-fns';
+import jobService from '../../services/jobService';
+import { Button, Badge, Card } from '../../components/ui';
+
+// Job detail page component
+const JobDetailPage = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  
+  const [job, setJob] = useState(null);
+  const [similarJobs, setSimilarJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  
+  // Fetch job details
+  useEffect(() => {
+    const fetchJobDetails = async () => {
+      if (!id) return;
+      
+      setLoading(true);
+      setError(null);
+      
+      try {
+        const [jobResponse, similarJobsResponse] = await Promise.all([
+          jobService.getJobById(id),
+          jobService.getSimilarJobs(id, 5)
+        ]);
+        
+        setJob(jobResponse.data);
+        setSimilarJobs(similarJobsResponse.data);
+      } catch (error) {
+        console.error('Error fetching job details:', error);
+        setError('Failed to load job details. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchJobDetails();
+  }, [id]);
+  
+  // Handle share job
+  const handleShareJob = () => {
+    setShareModalOpen(true);
+  };

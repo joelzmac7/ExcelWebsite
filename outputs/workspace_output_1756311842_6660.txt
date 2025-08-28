@@ -1,0 +1,23 @@
+           11. GET JOBS
+
+          12. INSERT CANDIDATE
+
+          13. UPDATE CANDIDATE
+
+          14. GET CANDIDATES
+
+          15. GET CANDIDATE BY CANDIDATE ID
+
+
+--
+11. GET JOBS
+
+URL:https://api-nexus.laboredge.com:9000/api/job-service/v1/ats/external/jobs/search
+METHOD: POST
+HEADER:
+    Key                                                                 Value
+    Authorization                                                       Bearer <jwt_access_token_of_oauth_api>
+
+INPUT: JSON Object
+
+{

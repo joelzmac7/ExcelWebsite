@@ -1,0 +1,12 @@
+./src/backend/models/facility.model.ts
+./src/backend/models/job.model.ts
+./src/backend/prisma/schema.prisma
+./src/backend/repositories/facility.repository.ts
+./src/backend/repositories/job.repository.ts
+./src/backend/services/api/laboredge-api.service.ts
+./src/backend/services/transformers/facility-transformer.service.ts
+./src/backend/services/transformers/job-transformer.service.ts
+./src/backend/utils/circuit-breaker.ts
+./src/backend/utils/logger.ts
+./src/backend/utils/metrics.ts
+./src/backend/utils/retry.ts

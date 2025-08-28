@@ -1,0 +1,6 @@
+total 24
+drwxr-xr-x  2 root root    95 Aug 27 23:05 .
+drwxr-xr-x 10 root root   174 Aug 27 23:17 ..
+-rw-r--r--  1 root root 12195 Aug 27 23:04 nexus-job-migration.js
+-rw-r--r--  1 root root  4594 Aug 27 23:04 nexus-job-migration.test.js
+-rw-r--r--  1 root root  2630 Aug 27 23:05 run-migration.js

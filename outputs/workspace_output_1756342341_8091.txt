@@ -1,0 +1,50 @@
+  } = useAutoSave(formData, `application_form_${job?.id || 'new'}`, 1000);
+  
+  // Form validation rules
+  const validationRules = {
+    firstName: { required: true, requiredMessage: 'First name is required' },
+    lastName: { required: true, requiredMessage: 'Last name is required' },
+    email: { 
+      required: true, 
+      isEmail: true, 
+      requiredMessage: 'Email is required',
+      emailMessage: 'Please enter a valid email address'
+    },
+    phone: { 
+      required: true, 
+      isPhone: true,
+      requiredMessage: 'Phone number is required',
+      phoneMessage: 'Please enter a valid phone number'
+    },
+    agreeToTerms: { 
+      custom: (value) => !value ? 'You must agree to the terms and conditions' : ''
+    }
+  };
+  
+  // Form validation hook
+  const { 
+    errors, 
+    isValid, 
+    touchedFields, 
+    touchField, 
+    validateForm 
+  } = useFormValidation(formData, validationRules);
+  
+  // Load saved data on initial render
+  useEffect(() => {
+    const savedData = loadSavedData();
+    if (savedData) {
+      // Don't restore file objects from localStorage
+      const { resume, ...restSavedData } = savedData;
+      setFormData(prevData => ({
+        ...prevData,
+        ...restSavedData
+      }));
+    }
+  }, [loadSavedData]);
+  
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    
+    setFormData({

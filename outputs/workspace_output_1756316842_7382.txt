@@ -51,8 +51,11 @@ The platform follows a microservices architecture with the following components:
 ### Prerequisites
 
 - Node.js 18+
+- Python 3.9+
 - Docker and Docker Compose
-- Git
+- PostgreSQL 14+
+- MongoDB 5+
+- AWS CLI
 
 ### Installation
 
@@ -68,56 +71,39 @@ cp .env.example .env
 # Edit .env with your configuration
 ```
 
-3. Start the development environment using Docker Compose:
+3. Start the development environment:
 ```bash
 docker-compose up -d
 ```
 
-This will start the following services:
-- PostgreSQL database (port 5432)
-- MongoDB database (port 27017)
-- Redis cache (port 6379)
-- Backend API (port 4000)
-- Frontend application (port 3000)
-- AI services (port 5000)
-
-4. Access the services:
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:4000
-   - AI Services: http://localhost:5000
-   - Prisma Studio: http://localhost:5555 (run `npx prisma studio` in the backend directory)
-
-### Manual Setup (Alternative to Docker)
-
-If you prefer to set up the services manually:
-
-1. Install frontend dependencies:
+4. Install frontend dependencies:
 ```bash
-cd src/frontend
+cd frontend
 npm install
 npm run dev
 ```
 
-2. Install backend dependencies:
+5. Install backend dependencies:
 ```bash
-cd src/backend
+cd ../backend
 npm install
-npx prisma generate
 npm run dev
 ```
 
-3. Install AI services dependencies:
+6. Set up AI components:
 ```bash
-cd src/ai
-npm install
-npm run dev
+cd ../ai
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python -m spacy download en_core_web_lg
 ```
 
 ### Database Setup
 
 1. Initialize PostgreSQL:
 ```bash
-cd src/backend
+cd backend
 npx prisma migrate dev
 npx prisma db seed
 ```
@@ -128,34 +114,43 @@ npx prisma db seed
 
 ```
 excel-medical-staffing/
-├── .github/workflows/     # GitHub Actions workflows
-├── src/
-│   ├── ai/                # AI services
-│   │   ├── content-generator/
-│   │   ├── conversation-ai/
-│   │   ├── job-matcher/
-│   │   └── resume-parser/
-│   ├── backend/           # Backend API
-│   │   ├── api/           # API routes
-│   │   ├── models/        # Data models
-│   │   ├── prisma/        # Database schema and migrations
-│   │   ├── repositories/  # Data access layer
-│   │   ├── services/      # Business logic
-│   │   └── utils/         # Utility functions
-│   ├── docs/              # Documentation
-│   │   ├── api/           # API documentation
-│   │   ├── architecture/  # Architecture diagrams
-│   │   └── user-guides/   # User guides
-│   ├── frontend/          # Frontend application
-│   │   ├── components/    # React components
-│   │   ├── pages/         # Next.js pages
-│   │   ├── styles/        # CSS styles
-│   │   └── utils/         # Utility functions
-│   └── infrastructure/    # Infrastructure as code
-│       ├── ci-cd/         # CI/CD configuration
-│       ├── kubernetes/    # Kubernetes manifests
-│       └── terraform/     # Terraform configuration
-└── docker-compose.yml     # Local development environment
+├── frontend/                # Next.js frontend application
+│   ├── public/              # Static assets
+│   ├── src/                 # Source code
+│   │   ├── components/      # React components
+│   │   ├── pages/           # Next.js pages
+│   │   ├── hooks/           # Custom React hooks
+│   │   ├── store/           # Redux store
+│   │   ├── services/        # API services
+│   │   ├── utils/           # Utility functions
+│   │   ├── styles/          # CSS and style files
+│   │   └── types/           # TypeScript type definitions
+│   └── ...
+├── backend/                 # Node.js backend application
+│   ├── src/                 # Source code
+│   │   ├── api/             # API routes and controllers
+│   │   ├── models/          # Data models
+│   │   ├── services/        # Business logic services
+│   │   ├── utils/           # Utility functions
+│   │   ├── middleware/      # Express middleware
+│   │   └── config/          # Configuration files
+│   ├── prisma/              # Prisma ORM files
+│   └── ...
+├── ai/                      # AI components
+│   ├── src/                 # Source code
+│   │   ├── resume-parser/   # Resume parsing service
+│   │   ├── job-matcher/     # Job matching service
+│   │   ├── conversation-ai/ # Conversational AI service
+│   │   └── content-generator/ # Content generation service
+│   └── ...
+├── infrastructure/          # Infrastructure as code
+│   ├── terraform/           # Terraform configurations
+│   ├── kubernetes/          # Kubernetes manifests
+│   └── ci-cd/              # CI/CD configurations
+└── docs/                    # Project documentation
+    ├── architecture/        # Architecture diagrams and docs
+    ├── api/                 # API documentation
+    └── user-guides/         # User guides and manuals
 ```
 
 ## Development Workflow
@@ -194,7 +189,7 @@ Example: `feat(job-board): implement job filtering by specialty`
 ### Frontend Testing
 
 ```bash
-cd src/frontend
+cd frontend
 npm run test        # Run unit tests
 npm run test:e2e    # Run end-to-end tests
 npm run test:coverage # Run tests with coverage report
@@ -203,7 +198,7 @@ npm run test:coverage # Run tests with coverage report
 ### Backend Testing
 
 ```bash
-cd src/backend
+cd backend
 npm run test        # Run unit tests
 npm run test:integration # Run integration tests
 npm run test:coverage # Run tests with coverage report
@@ -212,9 +207,10 @@ npm run test:coverage # Run tests with coverage report
 ### AI Components Testing
 
 ```bash
-cd src/ai
-npm run test        # Run unit tests
-npm run test:integration # Run integration tests
+cd ai
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pytest                    # Run all tests
+pytest tests/resume-parser # Run specific test suite
 ```
 
 ## Deployment
@@ -234,10 +230,10 @@ npm run deploy:production
 
 ## Documentation
 
-- [Project Documentation](src/docs/README.md)
-- [API Documentation](src/docs/api/README.md)
-- [Architecture Documentation](src/docs/architecture/README.md)
-- [User Guides](src/docs/user-guides/README.md)
+- [Project Documentation](docs/README.md)
+- [API Documentation](docs/api/README.md)
+- [Architecture Documentation](docs/architecture/README.md)
+- [User Guides](docs/user-guides/README.md)
 
 ## Implementation Roadmap
 

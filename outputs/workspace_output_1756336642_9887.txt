@@ -1,0 +1,4 @@
+total 16
+drwxr-xr-x  2 root root    27 Aug 27 17:39 .
+drwxr-xr-x 10 root root   162 Aug 27 23:04 ..
+-rw-r--r--  1 root root 14960 Aug 27 17:39 schema.prisma

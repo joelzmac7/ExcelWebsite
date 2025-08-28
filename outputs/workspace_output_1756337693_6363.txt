@@ -1,0 +1,522 @@
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import Link from 'next/link';
+import axios from 'axios';
+import { formatDistanceToNow } from 'date-fns';
+
+// Job detail page component
+const JobDetailPage = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  
+  const [job, setJob] = useState(null);
+  const [similarJobs, setSimilarJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Fetch job details
+  useEffect(() => {
+    const fetchJobDetails = async () => {
+      if (!id) return;
+      
+      setLoading(true);
+      setError(null);
+      
+      try {
+        const [jobResponse, similarJobsResponse] = await Promise.all([
+          axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${id}`),
+          axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${id}/similar`)
+        ]);
+        
+        setJob(jobResponse.data.data);
+        setSimilarJobs(similarJobsResponse.data.data);
+      } catch (error) {
+        console.error('Error fetching job details:', error);
+        setError('Failed to load job details. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchJobDetails();
+  }, [id]);
+  
+  if (loading) {
+    return <JobDetailSkeleton />;
+  }
+  
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-red-50 border-l-4 border-red-400 p-4 my-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          </div>
+        </div>
+        <Link href="/jobs/search">
+          <a className="text-blue-600 hover:text-blue-800">
+            &larr; Back to job search
+          </a>
+        </Link>
+      </div>
+    );
+  }
+  
+  if (!job) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-yellow-700">
+                Job not found. It may have been filled or removed.
+              </p>
+            </div>
+          </div>
+        </div>
+        <Link href="/jobs/search">
+          <a className="text-blue-600 hover:text-blue-800">
+            &larr; Back to job search
+          </a>
+        </Link>
+      </div>
+    );
+  }
+  
+  // Format dates
+  const postedDate = job.createdAt ? formatDistanceToNow(new Date(job.createdAt), { addSuffix: true }) : 'Recently';
+  const startDate = job.startDate ? new Date(job.startDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Flexible';
+  const endDate = job.endDate ? new Date(job.endDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'To be determined';
+  
+  // Format pay rate
+  const formattedPayRate = job.payRate ? `$${job.payRate.toLocaleString()}/week` : 'Competitive';
+  
+  // Calculate assignment duration
+  let duration = 'Flexible';
+  if (job.startDate && job.endDate) {
+    const start = new Date(job.startDate);
+    const end = new Date(job.endDate);
+    const weeks = Math.ceil((end - start) / (7 * 24 * 60 * 60 * 1000));
+    duration = `${weeks} weeks`;
+  }
+  
+  return (
+    <>
+      <Head>
+        <title>{job.title} in {job.city}, {job.state} | Excel Medical Staffing</title>
+        <meta name="description" content={job.seoDescription || `${job.title} position at ${job.facilityName} in ${job.city}, ${job.state}. Apply now with Excel Medical Staffing.`} />
+        
+        {/* Schema.org job posting markup */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "JobPosting",
+            "title": job.title,
+            "description": job.description,
+            "datePosted": job.createdAt,
+            "validThrough": job.endDate,
+            "employmentType": "CONTRACTOR",
+            "hiringOrganization": {
+              "@type": "Organization",
+              "name": "Excel Medical Staffing",
+              "sameAs": "https://excelmedicalsolutions.com"
+            },
+            "jobLocation": {
+              "@type": "Place",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": job.city,
+                "addressRegion": job.state,
+                "postalCode": job.zipCode,
+                "addressCountry": "US"
+              }
+            },
+            "baseSalary": {
+              "@type": "MonetaryAmount",
+              "currency": "USD",
+              "value": {
+                "@type": "QuantitativeValue",
+                "value": job.payRate,
+                "unitText": "WEEK"
+              }
+            },
+            "skills": job.requirements,
+            "industry": "Healthcare"
+          })}
+        </script>
+      </Head>
+      
+      <div className="bg-gray-50 min-h-screen py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumbs */}
+          <nav className="flex mb-6" aria-label="Breadcrumb">
+            <ol className="flex items-center space-x-4">
+              <li>
+                <div>
+                  <Link href="/">
+                    <a className="text-gray-400 hover:text-gray-500">
+                      <svg className="flex-shrink-0 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                      </svg>
+                      <span className="sr-only">Home</span>
+                    </a>
+                  </Link>
+                </div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                  <svg className="flex-shrink-0 h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+                  </svg>
+                  <Link href="/jobs/search">
+                    <a className="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Jobs</a>
+                  </Link>
+                </div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                  <svg className="flex-shrink-0 h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+                  </svg>
+                  <span className="ml-4 text-sm font-medium text-gray-500 truncate max-w-xs">
+                    {job.title}
+                  </span>
+                </div>
+              </li>
+            </ol>
+          </nav>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main content */}
+            <div className="lg:col-span-2">
+              {/* Job header */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
+                    <p className="text-lg text-gray-600">{job.facilityName}</p>
+                    <p className="text-gray-600">{job.city}, {job.state}</p>
+                  </div>
+                  <div className="flex space-x-2">
+                    {job.isUrgent && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        Urgent
+                      </span>
+                    )}
+                    {job.isFeatured && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        Featured
+                      </span>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="mt-6 grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500">Specialty</h3>
+                    <p className="mt-1 text-sm text-gray-900">{job.specialty}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500">Weekly Pay</h3>
+                    <p className="mt-1 text-sm text-gray-900">{formattedPayRate}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500">Start Date</h3>
+                    <p className="mt-1 text-sm text-gray-900">{startDate}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500">Duration</h3>
+                    <p className="mt-1 text-sm text-gray-900">{duration}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500">Shift</h3>
+                    <p className="mt-1 text-sm text-gray-900">{job.shiftType || 'Various'} - {job.shiftDetails}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500">Weekly Hours</h3>
+                    <p className="mt-1 text-sm text-gray-900">{job.weeklyHours} hours</p>
+                  </div>
+                </div>
+                
+                <div className="mt-6 flex items-center justify-between">
+                  <p className="text-sm text-gray-500">
+                    Posted {postedDate} • {job.viewsCount || 0} views • {job.applicationsCount || 0} applications
+                  </p>
+                  
+                  <div className="flex space-x-2">
+                    <button
+                      type="button"
+                      className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                      Save
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                      </svg>
+                      Share
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Job description */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                <h2 className="text-lg font-medium text-gray-900 mb-4">Job Description</h2>
+                <div className="prose max-w-none">
+                  <p>{job.description}</p>
+                </div>
+              </div>
+              
+              {/* Requirements */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                <h2 className="text-lg font-medium text-gray-900 mb-4">Requirements</h2>
+                <div className="prose max-w-none">
+                  <p>{job.requirements}</p>
+                </div>
+              </div>
+              
+              {/* Benefits */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                <h2 className="text-lg font-medium text-gray-900 mb-4">Benefits</h2>
+                <div className="prose max-w-none">
+                  <p>{job.benefits}</p>
+                </div>
+              </div>
+              
+              {/* Facility information */}
+              {job.facility && (
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                  <h2 className="text-lg font-medium text-gray-900 mb-4">About the Facility</h2>
+                  <div className="prose max-w-none">
+                    <p>{job.facility.description || `${job.facilityName} is located in ${job.city}, ${job.state}.`}</p>
+                  </div>
+                  
+                  {job.facility.type && (
+                    <div className="mt-4">
+                      <h3 className="text-sm font-medium text-gray-500">Facility Type</h3>
+                      <p className="mt-1 text-sm text-gray-900">{job.facility.type}</p>
+                    </div>
+                  )}
+                  
+                  {job.facility.bedCount && (
+                    <div className="mt-4">
+                      <h3 className="text-sm font-medium text-gray-500">Bed Count</h3>
+                      <p className="mt-1 text-sm text-gray-900">{job.facility.bedCount}</p>
+                    </div>
+                  )}
+                  
+                  {job.facility.traumaLevel && (
+                    <div className="mt-4">
+                      <h3 className="text-sm font-medium text-gray-500">Trauma Level</h3>
+                      <p className="mt-1 text-sm text-gray-900">{job.facility.traumaLevel}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {/* Location information */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                <h2 className="text-lg font-medium text-gray-900 mb-4">Location</h2>
+                
+                {job.coordinates && (
+                  <div className="h-64 bg-gray-200 rounded-lg mb-4">
+                    {/* Map would go here */}
+                    <div className="h-full flex items-center justify-center text-gray-500">
+                      Map showing {job.city}, {job.state}
+                    </div>
+                  </div>
+                )}
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500">City</h3>
+                    <p className="mt-1 text-sm text-gray-900">{job.city}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500">State</h3>
+                    <p className="mt-1 text-sm text-gray-900">{job.state}</p>
+                  </div>
+                  {job.zipCode && (
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500">ZIP Code</h3>
+                      <p className="mt-1 text-sm text-gray-900">{job.zipCode}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            {/* Sidebar */}
+            <div className="lg:col-span-1">
+              {/* Apply button */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                <button
+                  type="button"
+                  className="w-full flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  onClick={() => router.push(`/jobs/${id}/apply`)}
+                >
+                  Apply Now
+                </button>
+                
+                <p className="mt-4 text-sm text-gray-500 text-center">
+                  Quick application process - takes less than 2 minutes
+                </p>
+              </div>
+              
+              {/* Similar jobs */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h2 className="text-lg font-medium text-gray-900 mb-4">Similar Jobs</h2>
+                
+                {similarJobs.length > 0 ? (
+                  <div className="space-y-4">
+                    {similarJobs.map((similarJob) => (
+                      <div key={similarJob.id} className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+                        <Link href={`/jobs/${similarJob.id}`}>
+                          <a className="block hover:bg-gray-50 -m-2 p-2 rounded-md">
+                            <h3 className="text-sm font-medium text-gray-900 hover:text-blue-600">{similarJob.title}</h3>
+                            <p className="text-xs text-gray-500">{similarJob.facilityName}</p>
+                            <p className="text-xs text-gray-500">{similarJob.city}, {similarJob.state}</p>
+                            <div className="mt-1 flex justify-between items-center">
+                              <span className="text-xs font-medium text-gray-900">${similarJob.payRate.toLocaleString()}/week</span>
+                              <span className="text-xs text-gray-500">{similarJob.shiftType || 'Various'}</span>
+                            </div>
+                          </a>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500">No similar jobs found.</p>
+                )}
+                
+                <div className="mt-4 text-center">
+                  <Link href="/jobs/search">
+                    <a className="text-sm text-blue-600 hover:text-blue-800">
+                      View all jobs
+                    </a>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+// Skeleton loader for job detail page
+const JobDetailSkeleton = () => {
+  return (
+    <div className="bg-gray-50 min-h-screen py-8 animate-pulse">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumbs skeleton */}
+        <div className="flex mb-6">
+          <div className="h-5 bg-gray-200 rounded w-1/3"></div>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main content skeleton */}
+          <div className="lg:col-span-2">
+            {/* Job header skeleton */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+              <div className="flex justify-between items-start">
+                <div className="w-3/4">
+                  <div className="h-7 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-5 bg-gray-200 rounded w-1/2 mb-2"></div>
+                  <div className="h-5 bg-gray-200 rounded w-1/3"></div>
+                </div>
+                <div className="flex space-x-2">
+                  <div className="h-5 bg-gray-200 rounded w-16"></div>
+                </div>
+              </div>
+              
+              <div className="mt-6 grid grid-cols-2 gap-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i}>
+                    <div className="h-4 bg-gray-200 rounded w-1/3 mb-1"></div>
+                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-6 flex items-center justify-between">
+                <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                <div className="flex space-x-2">
+                  <div className="h-8 bg-gray-200 rounded w-16"></div>
+                  <div className="h-8 bg-gray-200 rounded w-16"></div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Content sections skeleton */}
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                <div className="h-6 bg-gray-200 rounded w-1/4 mb-4"></div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Sidebar skeleton */}
+          <div className="lg:col-span-1">
+            {/* Apply button skeleton */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+              <div className="h-12 bg-gray-200 rounded w-full mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>
+            </div>
+            
+            {/* Similar jobs skeleton */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
+              
+              <div className="space-y-4">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-1"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/2 mb-1"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/3 mb-1"></div>
+                    <div className="mt-1 flex justify-between items-center">
+                      <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+                      <div className="h-3 bg-gray-200 rounded w-1/5"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-4 flex justify-center">
+                <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default JobDetailPage;

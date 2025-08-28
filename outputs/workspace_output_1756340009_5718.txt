@@ -1,0 +1,7 @@
+total 4
+drwxr-xr-x 6 root root   66 Aug 27 23:26 .
+drwxr-xr-x 7 root root 4096 Aug 27 23:50 ..
+drwxr-xr-x 5 root root   52 Aug 27 23:47 components
+drwxr-xr-x 3 root root  117 Aug 27 23:50 hooks
+drwxr-xr-x 3 root root   34 Aug 27 23:10 pages
+drwxr-xr-x 3 root root  107 Aug 27 23:53 services

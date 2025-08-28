@@ -1,0 +1,8 @@
+total 40
+drwxr-xr-x 2 root root  125 Aug 27 23:55 .
+drwxr-xr-x 6 root root   69 Aug 27 23:54 ..
+-rw-r--r-- 1 root root 4008 Aug 27 23:54 backup-database.sh
+-rw-r--r-- 1 root root 3734 Aug 27 23:54 db-backup.sh
+-rw-r--r-- 1 root root 8041 Aug 27 23:55 db-maintenance.sh
+-rw-r--r-- 1 root root 9471 Aug 27 23:55 db-monitor.sh
+-rw-r--r-- 1 root root 8706 Aug 27 23:55 monitor-database.sh

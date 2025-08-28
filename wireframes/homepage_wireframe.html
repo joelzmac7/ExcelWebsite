@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Medical Staffing - Homepage Wireframe</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .logo span {
+            color: #3498db;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #3498db;
+        }
+        
+        .cta-button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .cta-button:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url('https://images.unsplash.com/photo-1504439468489-c8920d796a29?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Search Box */
+        .search-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .search-form select,
+        .search-form input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .search-form button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-form button:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Featured Jobs Section */
+        .featured-jobs {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: #7f8c8d;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .job-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .job-card-header {
+            padding: 20px;
+            border-bottom: 1px solid #f1f1f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .job-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .job-type {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .job-card-body {
+            padding: 20px;
+        }
+        
+        .job-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .job-info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #7f8c8d;
+        }
+        
+        .job-info-item i {
+            color: #3498db;
+        }
+        
+        .job-card-footer {
+            padding: 20px;
+            border-top: 1px solid #f1f1f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .job-salary {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .job-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        .job-link:hover {
+            color: #2980b9;
+        }
+        
+        /* Why Choose Us Section */
+        .why-choose-us {
+            background-color: #fff;
+            padding: 80px 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .feature-icon {
+            background-color: #e3f2fd;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: #3498db;
+            font-size: 30px;
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .feature-description {
+            color: #7f8c8d;
+        }
+        
+        /* Testimonials Section */
+        .testimonials {
+            padding: 80px 0;
+            background-color: #f5f7fa;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #7f8c8d;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .author-info p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(rgba(52, 152, 219, 0.9), rgba(41, 128, 185, 0.9)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            padding: 80px 0;
+            text-align: center;
+            color: white;
+        }
+        
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .cta-section p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 18px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .cta-primary {
+            background-color: white;
+            color: #3498db;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .cta-primary:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .cta-secondary {
+            background-color: transparent;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            border: 2px solid white;
+            transition: background-color 0.3s;
+        }
+        
+        .cta-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Blog Section */
+        .blog-section {
+            padding: 80px 0;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .blog-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .blog-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .blog-card:hover .blog-image img {
+            transform: scale(1.05);
+        }
+        
+        .blog-content {
+            padding: 20px;
+        }
+        
+        .blog-date {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .blog-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .blog-excerpt {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .blog-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        .blog-link:hover {
+            color: #2980b9;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #3498db;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #3498db;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .social-link:hover {
+            background-color: #3498db;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 20px 0;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 10px 15px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .search-form select,
+            .search-form input,
+            .search-form button {
+                width: 100%;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        /* Placeholder styles */
+        .placeholder-box {
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            height: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .placeholder-circle {
+            background-color: #e0e0e0;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+        }
+        
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #3498db;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            z-index: 1000;
+        }
+        
+        .ai-assistant:hover {
+            transform: scale(1.1);
+            background-color: #2980b9;
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Excel <span>Medical Staffing</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Jobs</a></li>
+                    <li><a href="#">Locations</a></li>
+                    <li><a href="#">Specialties</a></li>
+                    <li><a href="#">Resources</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#" class="cta-button">Apply Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Find Your Perfect Healthcare Job</h1>
+            <p>Join thousands of healthcare professionals who found their dream positions through Excel Medical Staffing</p>
+            
+            <!-- Search Box -->
+            <div class="search-box">
+                <form class="search-form">
+                    <select>
+                        <option value="">Select Specialty</option>
+                        <option value="rn">Registered Nurse (RN)</option>
+                        <option value="lpn">Licensed Practical Nurse (LPN)</option>
+                        <option value="cna">Certified Nursing Assistant (CNA)</option>
+                        <option value="pt">Physical Therapist (PT)</option>
+                        <option value="ot">Occupational Therapist (OT)</option>
+                    </select>
+                    
+                    <select>
+                        <option value="">Select Location</option>
+                        <option value="ca">California</option>
+                        <option value="tx">Texas</option>
+                        <option value="ny">New York</option>
+                        <option value="fl">Florida</option>
+                        <option value="il">Illinois</option>
+                    </select>
+                    
+                    <button type="submit">Search Jobs</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Jobs Section -->
+    <section class="featured-jobs">
+        <div class="container">
+            <div class="section-title">
+                <h2>Featured Jobs</h2>
+                <p>Explore our most in-demand healthcare positions across the country</p>
+            </div>
+            
+            <div class="jobs-grid">
+                <!-- Job Card 1 -->
+                <div class="job-card">
+                    <div class="job-card-header">
+                        <h3 class="job-title">ICU Registered Nurse</h3>
+                        <span class="job-type">Travel</span>
+                    </div>
+                    <div class="job-card-body">
+                        <div class="job-info">
+                            <div class="job-info-item">
+                                <i>📍</i>
+                                <span>San Francisco, CA</span>
+                            </div>
+                            <div class="job-info-item">
+                                <i>⏱️</i>
+                                <span>13 Week Assignment</span>
+                            </div>
+                            <div class="job-info-item">
+                                <i>🏥</i>
+                                <span>Memorial Hospital</span>
+                            </div>
+                            <div class="job-info-item">
+                                <i>🔥</i>
+                                <span>Hot Job - High Demand</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="job-card-footer">
+                        <div class="job-salary">$2,800 - $3,200/week</div>
+                        <a href="#" class="job-link">View Details →</a>
+                    </div>
+                </div>
+                
+                <!-- Job Card 2 -->
+                <div class="job-card">
+                    <div class="job-card-header">
+                        <h3 class="job-title">ER Registered Nurse</h3>
+                        <span class="job-type">Travel</span>
+                    </div>
+                    <div class="job-card-body">
+                        <div class="job-info">
+                            <div class="job-info-item">
+                                <i>📍</i>
+                                <span>Houston, TX</span>
+                            </div>
+                            <div class="job-info-item">
+                                <i>⏱️</i>
+                                <span>8 Week Assignment</span>
+                            </div>
+                            <div class="job-info-item">
+                                <i>🏥</i>
+                                <span>Texas Medical Center</span>
+                            </div>
+                            <div class="job-info-item">
+                                <i>💰</i>
+                                <span>$3,000 Sign-on Bonus</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="job-card-footer">
+                        <div class="job-salary">$3,000 - $3,500/week</div>
+                        <a href="#" class="job-link">View Details →</a>
+                    </div>
+                </div>
+                
+                <!-- Job Card 3 -->
+                <div class="job-card">
+                    <div class="job-card-header">
+                        <h3 class="job-title">Physical Therapist</h3>
+                        <span class="job-type">Permanent</span>
+                    </div>
+                    <div class="job-card-body">
+                        <div class="job-info">
+                            <div class="job-info-item">
+                                <i>📍</i>
+                                <span>Chicago, IL</span>
+                            </div>
+                            <div class="job-info-item">
+                                <i>⏱️</i>
+                                <span>Full-Time</span>
+                            </div>
+                            <div class="job-info-item">
+                                <i>🏥</i>
+                                <span>Rehabilitation Center</span>
+                            </div>
+                            <div class="job-info-item">
+                                <i>🏠</i>
+                                <span>Relocation Assistance</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="job-card-footer">
+                        <div class="job-salary">$85,000 - $95,000/year</div>
+                        <a href="#" class="job-link">View Details →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="#" class="cta-button">View All Jobs</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose-us">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose Excel Medical Staffing</h2>
+                <p>We're committed to finding the perfect match for healthcare professionals and facilities</p>
+            </div>
+            
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card">
+                    <div class="feature-icon">💼</div>
+                    <h3 class="feature-title">Thousands of Jobs</h3>
+                    <p class="feature-description">Access to thousands of exclusive healthcare positions across all 50 states</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3 class="feature-title">Fast Placement</h3>
+                    <p class="feature-description">Our AI-powered matching gets you interviewed and placed faster than traditional agencies</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">Competitive Pay</h3>
+                    <p class="feature-description">Industry-leading compensation packages with great benefits and bonuses</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3 class="feature-title">Veteran-Owned</h3>
+                    <p class="feature-description">Proud to be a veteran-owned business with a commitment to excellence</p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3 class="feature-title">Dedicated Support</h3>
+                    <p class="feature-description">Personal recruiters who advocate for you throughout your assignment</p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="feature-card">
+                    <div class="feature-icon">🏡</div>
+                    <h3 class="feature-title">Housing Assistance</h3>
+                    <p class="feature-description">Comprehensive housing support for travel assignments</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>What Healthcare Professionals Say</h2>
+                <p>Hear from professionals who found their ideal positions through Excel Medical Staffing</p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Excel Medical Staffing found me the perfect ICU position in California. My recruiter was amazing throughout the entire process, from application to onboarding. I'm now on my third assignment with them!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Sarah Johnson">
+                        </div>
+                        <div class="author-info">
+                            <h4>Sarah Johnson, RN</h4>
+                            <p>ICU Nurse - 3 Years with Excel</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"As a physical therapist looking for flexibility, Excel Medical Staffing has been a game-changer. They found me high-paying assignments that perfectly matched my skills and preferences."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Rodriguez">
+                        </div>
+                        <div class="author-info">
+                            <h4>Michael Rodriguez, PT</h4>
+                            <p>Physical Therapist - 2 Years with Excel</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The AI job matching at Excel Medical Staffing is incredible. Within days of uploading my resume, I had interviews lined up with top hospitals that perfectly matched my experience and preferences."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Jennifer Lee">
+                        </div>
+                        <div class="author-info">
+                            <h4>Jennifer Lee, CRNA</h4>
+                            <p>Nurse Anesthetist - 1 Year with Excel</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Find Your Next Healthcare Position?</h2>
+            <p>Join thousands of healthcare professionals who have advanced their careers with Excel Medical Staffing</p>
+            <div class="cta-buttons">
+                <a href="#" class="cta-primary">Apply Now</a>
+                <a href="#" class="cta-secondary">Speak with a Recruiter</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="blog-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Healthcare Career Resources</h2>
+                <p>Expert advice and insights to help you advance your healthcare career</p>
+            </div>
+            
+            <div class="blog-grid">
+                <!-- Blog Post 1 -->
+                <div class="blog-card">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Travel Nursing Tips">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date">August 20, 2025</div>
+                        <h3 class="blog-title">10 Essential Tips for First-Time Travel Nurses</h3>
+                        <p class="blog-excerpt">Navigate your first travel nursing assignment with confidence using these expert tips from seasoned travelers.</p>
+                        <a href="#" class="blog-link">Read More →</a>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 2 -->
+                <div class="blog-card">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1504439468489-c8920d796a29?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="License Guide">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date">August 15, 2025</div>
+                        <h3 class="blog-title">Complete Guide to Multi-State Nursing Licenses</h3>
+                        <p class="blog-excerpt">Everything you need to know about compact states, license requirements, and maximizing your career mobility.</p>
+                        <a href="#" class="blog-link">Read More →</a>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 3 -->
+                <div class="blog-card">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="City Guide">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date">August 10, 2025</div>
+                        <h3 class="blog-title">City Spotlight: Living and Working in San Diego</h3>
+                        <p class="blog-excerpt">Discover what makes San Diego a top destination for healthcare professionals, from hospitals to housing.</p>
+                        <a href="#" class="blog-link">Read More →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Column 1 -->
+                <div class="footer-column">
+                    <h3>Excel Medical Staffing</h3>
+                    <p>Connecting healthcare professionals with their ideal positions since 2015. Veteran-owned and committed to excellence.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">f</a>
+                        <a href="#" class="social-link">t</a>
+                        <a href="#" class="social-link">in</a>
+                        <a href="#" class="social-link">ig</a>
+                    </div>
+                </div>
+                
+                <!-- Column 2 -->
+                <div class="footer-column">
+                    <h3>For Healthcare Professionals</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Browse Jobs</a></li>
+                        <li><a href="#">Travel Nursing</a></li>
+                        <li><a href="#">Allied Health</a></li>
+                        <li><a href="#">Permanent Placement</a></li>
+                        <li><a href="#">Clinical Trials</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Salary Calculator</a></li>
+                        <li><a href="#">Licensing Guides</a></li>
+                        <li><a href="#">City Guides</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Our Team</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Excel Medical Staffing. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Assistant Button -->
+    <div class="ai-assistant">
+        💬
+    </div>
+</body>
+</html>

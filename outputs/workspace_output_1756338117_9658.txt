@@ -1,0 +1,10 @@
+total 8
+drwxr-xr-x 7 root root  147 Aug 27 17:44 .
+drwxr-xr-x 7 root root   81 Aug 27 17:08 ..
+-rw-r--r-- 1 root root  205 Aug 27 17:43 Dockerfile.dev
+drwxr-xr-x 2 root root    6 Aug 27 17:08 content-generator
+drwxr-xr-x 2 root root    6 Aug 27 17:08 conversation-ai
+drwxr-xr-x 2 root root    6 Aug 27 17:08 job-matcher
+-rw-r--r-- 1 root root 1489 Aug 27 17:44 package.json
+drwxr-xr-x 2 root root    6 Aug 27 17:08 resume-parser
+drwxr-xr-x 2 root root   22 Aug 27 17:44 src

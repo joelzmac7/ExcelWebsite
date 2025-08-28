@@ -1,0 +1,50 @@
+                                                         CONTENTS
+           1. OAUTH AUTHENTICATION API
+
+           2. OAUTH REFRESH TOKEN API
+
+           3. GET PROFESSION
+
+           4. GET SPECIALTY
+
+           5. GET STATES
+
+           6. GET COUNTRIES
+
+           7. GET CANDIDATE STATUSES
+
+           8. GET REFERRAL SOURCES
+
+           9. GET RECRUITERS
+
+          10. GET CANDIDATE TYPES
+
+           11. GET JOBS
+
+          12. INSERT CANDIDATE
+
+          13. UPDATE CANDIDATE
+
+          14. GET CANDIDATES
+
+          15. GET CANDIDATE BY CANDIDATE ID
+
+
+
+
+1. OAUTH AUTHENTICATION API
+
+URL: https://api-nexus.laboredge.com:9000/api/secured/oauth/token
+METHOD: POST
+HEADER:
+
+ Key                                                            Value
+ Content-Type                                                   application/x-www-form-urlencoded
+ Authorization                                                  Basic dm1zOnZtc1NlY3JldCMk
+
+
+INPUT:
+         consumes: application/x-www-form-urlencoded
+         parameters:
+
+                      Key                       Value

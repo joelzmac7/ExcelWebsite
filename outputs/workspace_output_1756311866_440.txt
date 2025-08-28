@@ -1,0 +1,52 @@
+12. INSERT CANDIDATE
+URL: https://api-nexus.laboredge.com:9000/api/api-integration/v1/candidates
+METHOD: POST
+HEADER: Authorization: Bearer <access_token>
+INPUT: JSON Object
+
+    {
+     "firstName": "Morris",
+     "lastName": "Jhonnasan",
+     "email": "Moris@yopmail.com",
+     "phone": "123-455-7890",
+     "cellPhone": "987-464-3210",
+     "statusId": 1,
+     "referralSourceId": 2,
+     "professionIds": [15],
+     "specialtyIds": [24],
+     "primarySpecialtyId": 24,
+     "jobTypeIds": [
+        "PERM",
+        "TRAVEL",
+        "PERDIEM",
+        "LOCAL"
+     ],
+     "addressLine1": "123 Main St",
+     "addressLine2": "Apt 456",
+     "stateId": null,
+     "city": "Springfield",
+     "zip": "12345",
+     "countryId": 8,
+     "yearsOfExperience": 5.5,
+     "availableFrom": "2023-09-01",
+      "preferredStateIds": [
+        228
+     ],
+    "candidateTypeIds": [
+        1
+     ],
+     "licensedStateIds": [
+        241,
+        259
+     ],
+     "travelStatus": true,
+     "candidatePrimaryDivisionId": null,
+     "candidateSecondaryDivisionIds": null,
+     "sendMassEmails": false,
+     "sendMassSms": true,
+     "recruiterId": 1475,
+     "ambassadorUrl": "https://434.ambassador",
+     "ambassador": true,
+     "facebook":"facebook.lofitest.com",
+     "instagram":"instagram.lofitest.com",
+     "linkedin":"linkedin.lofitest.com",

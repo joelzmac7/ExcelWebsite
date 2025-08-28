@@ -1,0 +1,50 @@
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import useAutoSave from '../../hooks/useAutoSave';
+import useFormValidation from '../../hooks/useFormValidation';
+import useResumeParser from '../../hooks/useResumeParser';
+import { Button, Input, Select, TextField, Checkbox } from '../ui';
+
+/**
+ * Enhanced Application Form Component
+ * 
+ * Features:
+ * - Multi-step form with progress tracking
+ * - Resume parsing and auto-fill
+ * - Auto-save functionality
+ * - Real-time validation
+ * - Mobile-responsive design
+ */
+const ApplicationForm = ({ job, onSubmit, initialData = {} }) => {
+  const router = useRouter();
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    resume: null,
+    coverLetter: '',
+    specialty: '',
+    yearsExperience: '',
+    licenses: [],
+    certifications: [],
+    availability: '',
+    referralSource: '',
+    agreeToTerms: false,
+    ...initialData
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  
+  // Resume parsing hook
+  const { 
+    parsing, 
+    parseError, 
+    handleResumeUpload 
+  } = useResumeParser();
+  
+  // Auto-save hook
+  const { 
+    loadSavedData, 
+    clearSavedData 

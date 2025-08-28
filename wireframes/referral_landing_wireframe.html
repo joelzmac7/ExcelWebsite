@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refer a Friend - Excel Medical Staffing</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .logo span {
+            color: #3498db;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #3498db;
+        }
+        
+        .cta-button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .cta-button:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url('https://images.unsplash.com/photo-1504439468489-c8920d796a29?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Referral Process */
+        .referral-process {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: #7f8c8d;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            position: relative;
+        }
+        
+        .process-steps:before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .process-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 25%;
+            padding: 0 15px;
+        }
+        
+        .step-number {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        .step-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .step-description {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        
+        /* Referral Form */
+        .referral-form-section {
+            padding: 80px 0;
+            background-color: #f5f7fa;
+        }
+        
+        .referral-form-container {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .referral-form-content {
+            flex: 1;
+        }
+        
+        .referral-form-content h2 {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .referral-form-content p {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        .referral-form-card {
+            flex: 1;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .form-note {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .submit-button {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-button:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Bonus Structure */
+        .bonus-structure {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+        
+        .bonus-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .bonus-table th {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .bonus-table td {
+            padding: 15px;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        
+        .bonus-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .bonus-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 0;
+            background-color: #f5f7fa;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #7f8c8d;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .author-info p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .bonus-amount {
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        /* FAQ Section */
+        .faq-section {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #f1f1f1;
+            padding-bottom: 20px;
+        }
+        
+        .faq-question {
+            font-size: 18px;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-question:after {
+            content: '+';
+            font-size: 20px;
+            color: #3498db;
+        }
+        
+        .faq-answer {
+            color: #7f8c8d;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(rgba(52, 152, 219, 0.9), rgba(41, 128, 185, 0.9)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            padding: 80px 0;
+            text-align: center;
+            color: white;
+        }
+        
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .cta-section p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 18px;
+        }
+        
+        .social-sharing {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .social-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .social-button:hover {
+            opacity: 0.9;
+        }
+        
+        .facebook {
+            background-color: #3b5998;
+        }
+        
+        .twitter {
+            background-color: #1da1f2;
+        }
+        
+        .linkedin {
+            background-color: #0077b5;
+        }
+        
+        .email {
+            background-color: #7f8c8d;
+        }
+        
+        .social-icon {
+            margin-right: 10px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #3498db;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #3498db;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .social-link:hover {
+            background-color: #3498db;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .process-steps {
+                flex-wrap: wrap;
+            }
+            
+            .process-step {
+                width: 50%;
+                margin-bottom: 30px;
+            }
+            
+            .process-steps:before {
+                display: none;
+            }
+            
+            .referral-form-container {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 20px 0;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 10px 15px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .process-step {
+                width: 100%;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .social-sharing {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #3498db;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            z-index: 1000;
+        }
+        
+        .ai-assistant:hover {
+            transform: scale(1.1);
+            background-color: #2980b9;
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Excel <span>Medical Staffing</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Jobs</a></li>
+                    <li><a href="#">Locations</a></li>
+                    <li><a href="#">Specialties</a></li>
+                    <li><a href="#">Resources</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#" class="cta-button">Apply Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Refer a Friend, Earn Up to $1,000</h1>
+            <p>Know talented healthcare professionals? Refer them to Excel Medical Staffing and earn generous bonuses when they get placed.</p>
+            <a href="#referral-form" class="cta-button">Refer Now</a>
+        </div>
+    </section>
+
+    <!-- Referral Process -->
+    <section class="referral-process">
+        <div class="container">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Our referral program is simple, transparent, and rewarding. Follow these easy steps to earn your bonus.</p>
+            </div>
+            
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Submit Referral</h3>
+                    <p class="step-description">Fill out our simple referral form with your friend's information.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">We Connect</h3>
+                    <p class="step-description">Our recruiters reach out to your referral within 24 hours.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">They Get Placed</h3>
+                    <p class="step-description">We find the perfect position for your referral's skills and preferences.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">You Get Paid</h3>
+                    <p class="step-description">Receive your bonus after your referral completes their first assignment.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Referral Form -->
+    <section id="referral-form" class="referral-form-section">
+        <div class="container">
+            <div class="referral-form-container">
+                <div class="referral-form-content">
+                    <h2>Refer a Healthcare Professional</h2>
+                    <p>Know someone who would be a great fit for travel nursing, allied health, or permanent placement? Let us know and earn rewards when they get placed!</p>
+                    <p>Your referral will receive priority consideration from our recruitment team, and you'll be kept in the loop throughout the process.</p>
+                </div>
+                
+                <div class="referral-form-card">
+                    <form>
+                        <h3>Your Information</h3>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="yourFirstName">First Name *</label>
+                                    <input type="text" id="yourFirstName" name="yourFirstName" required>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="yourLastName">Last Name *</label>
+                                    <input type="text" id="yourLastName" name="yourLastName" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="yourEmail">Email Address *</label>
+                            <input type="email" id="yourEmail" name="yourEmail" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="yourPhone">Phone Number *</label>
+                            <input type="tel" id="yourPhone" name="yourPhone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="relationship">How do you know the referral? *</label>
+                            <select id="relationship" name="relationship" required>
+                                <option value="">Select Relationship</option>
+                                <option value="colleague">Former/Current Colleague</option>
+                                <option value="friend">Friend</option>
+                                <option value="classmate">Classmate</option>
+                                <option value="family">Family Member</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <h3>Referral Information</h3>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="referralFirstName">First Name *</label>
+                                    <input type="text" id="referralFirstName" name="referralFirstName" required>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="referralLastName">Last Name *</label>
+                                    <input type="text" id="referralLastName" name="referralLastName" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="referralEmail">Email Address *</label>
+                            <input type="email" id="referralEmail" name="referralEmail" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="referralPhone">Phone Number *</label>
+                            <input type="tel" id="referralPhone" name="referralPhone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="profession">Profession *</label>
+                            <select id="profession" name="profession" required>
+                                <option value="">Select Profession</option>
+                                <option value="rn">Registered Nurse (RN)</option>
+                                <option value="lpn">Licensed Practical Nurse (LPN)</option>
+                                <option value="cna">Certified Nursing Assistant (CNA)</option>
+                                <option value="pt">Physical Therapist (PT)</option>
+                                <option value="ot">Occupational Therapist (OT)</option>
+                                <option value="slp">Speech Language Pathologist (SLP)</option>
+                                <option value="rt">Respiratory Therapist (RT)</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="specialty">Specialty</label>
+                            <select id="specialty" name="specialty">
+                                <option value="">Select Specialty</option>
+                                <option value="icu">ICU</option>
+                                <option value="er">Emergency Room</option>
+                                <option value="med_surg">Med/Surg</option>
+                                <option value="or">Operating Room</option>
+                                <option value="l_d">Labor & Delivery</option>
+                                <option value="peds">Pediatrics</option>
+                                <option value="tele">Telemetry</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="notes">Additional Notes</label>
+                            <textarea id="notes" name="notes" rows="3" placeholder="Any additional information that might help us connect with your referral"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="referralConsent">
+                                <input type="checkbox" id="referralConsent" name="referralConsent" required>
+                                I confirm that I have permission from the person I'm referring to share their contact information.
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="submit-button">Submit Referral</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bonus Structure -->
+    <section class="bonus-structure">
+        <div class="container">
+            <div class="section-title">
+                <h2>Referral Bonus Structure</h2>
+                <p>The more qualified professionals you refer, the more you earn. Our generous bonus structure rewards you for helping us find top talent.</p>
+            </div>
+            
+            <table class="bonus-table">
+                <thead>
+                    <tr>
+                        <th>Position Type</th>
+                        <th>Assignment Length</th>
+                        <th>Bonus Amount</th>
+                        <th>Payment Timeline</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Travel RN</td>
+                        <td>13-week assignment</td>
+                        <td><span class="bonus-amount">$500</span></td>
+                        <td>After completion of first assignment</td>
+                    </tr>
+                    <tr>
+                        <td>Travel RN</td>
+                        <td>26-week assignment</td>
+                        <td><span class="bonus-amount">$750</span></td>
+                        <td>After completion of first assignment</td>
+                    </tr>
+                    <tr>
+                        <td>Travel Allied Health</td>
+                        <td>13-week assignment</td>
+                        <td><span class="bonus-amount">$400</span></td>
+                        <td>After completion of first assignment</td>
+                    </tr>
+                    <tr>
+                        <td>Travel Allied Health</td>
+                        <td>26-week assignment</td>
+                        <td><span class="bonus-amount">$600</span></td>
+                        <td>After completion of first assignment</td>
+                    </tr>
+                    <tr>
+                        <td>Permanent Placement</td>
+                        <td>Full-time position</td>
+                        <td><span class="bonus-amount">$1,000</span></td>
+                        <td>After 90 days of employment</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Success Stories</h2>
+                <p>Hear from healthcare professionals who have successfully referred their colleagues and friends to Excel Medical Staffing.</p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"I referred three of my former colleagues to Excel Medical Staffing, and all of them got placed within weeks. The process was seamless, and I received my referral bonuses promptly. It's a win-win for everyone!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Sarah Johnson">
+                        </div>
+                        <div class="author-info">
+                            <h4>Sarah Johnson, RN</h4>
+                            <p>Earned $1,500 in referral bonuses</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"My friend was looking for a new opportunity, and I knew Excel Medical Staffing would be perfect for him. The recruiters were professional and found him an ideal position. I earned a nice bonus, and he loves his new job!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Rodriguez">
+                        </div>
+                        <div class="author-info">
+                            <h4>Michael Rodriguez, PT</h4>
+                            <p>Earned $600 in referral bonuses</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"I referred my former classmate for a permanent position, and she was placed at a top hospital in California. The referral process was simple, and I received my $1,000 bonus after she completed her first 90 days. Couldn't be happier!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Jennifer Lee">
+                        </div>
+                        <div class="author-info">
+                            <h4>Jennifer Lee, CRNA</h4>
+                            <p>Earned $1,000 in referral bonuses</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Frequently Asked Questions</h2>
+                <p>Get answers to common questions about our referral program.</p>
+            </div>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">How many people can I refer?</div>
+                    <div class="faq-answer">
+                        <p>There is no limit to the number of healthcare professionals you can refer. The more qualified candidates you refer who get placed, the more bonuses you can earn.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">When will I receive my referral bonus?</div>
+                    <div class="faq-answer">
+                        <p>For travel positions, referral bonuses are paid after your referral completes their first assignment. For permanent placements, bonuses are paid after your referral completes 90 days of employment.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Do I need to be an Excel Medical Staffing employee to refer someone?</div>
+                    <div class="faq-answer">
+                        <p>No, our referral program is open to everyone. Whether you're a current employee, a former employee, or have never worked with us, you can refer healthcare professionals and earn bonuses.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How will I know if my referral has been contacted?</div>
+                    <div class="faq-answer">
+                        <p>We'll keep you updated throughout the process. You'll receive email notifications when we contact your referral, when they're placed, and when your bonus is processed.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">What if my referral is already in your database?</div>
+                    <div class="faq-answer">
+                        <p>If your referral is already in our active database (contacted within the last 6 months), they won't qualify for the referral bonus. However, if they haven't been contacted in over 6 months, they're considered a new referral.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How are referral bonuses paid?</div>
+                    <div class="faq-answer">
+                        <p>Referral bonuses can be paid via direct deposit or check, based on your preference. You'll need to complete a W-9 form for tax purposes before receiving your bonus.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Share This Opportunity</h2>
+            <p>Know someone who might be interested in our referral program? Share this page with them and start earning bonuses together!</p>
+            
+            <div class="social-sharing">
+                <a href="#" class="social-button facebook">
+                    <span class="social-icon">f</span>
+                    Share on Facebook
+                </a>
+                <a href="#" class="social-button twitter">
+                    <span class="social-icon">t</span>
+                    Share on Twitter
+                </a>
+                <a href="#" class="social-button linkedin">
+                    <span class="social-icon">in</span>
+                    Share on LinkedIn
+                </a>
+                <a href="#" class="social-button email">
+                    <span class="social-icon">✉</span>
+                    Share via Email
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Column 1 -->
+                <div class="footer-column">
+                    <h3>Excel Medical Staffing</h3>
+                    <p>Connecting healthcare professionals with their ideal positions since 2015. Veteran-owned and committed to excellence.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">f</a>
+                        <a href="#" class="social-link">t</a>
+                        <a href="#" class="social-link">in</a>
+                        <a href="#" class="social-link">ig</a>
+                    </div>
+                </div>
+                
+                <!-- Column 2 -->
+                <div class="footer-column">
+                    <h3>For Healthcare Professionals</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Browse Jobs</a></li>
+                        <li><a href="#">Travel Nursing</a></li>
+                        <li><a href="#">Allied Health</a></li>
+                        <li><a href="#">Permanent Placement</a></li>
+                        <li><a href="#">Clinical Trials</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Salary Calculator</a></li>
+                        <li><a href="#">Licensing Guides</a></li>
+                        <li><a href="#">City Guides</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Our Team</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Excel Medical Staffing. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Assistant Button -->
+    <div class="ai-assistant">
+        💬
+    </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+total 924
+drwxr-xr-x 6 root root   4096 Aug 27 23:15 .
+drwxr-xr-x 1 root root    122 Aug 27 23:34 ..
+-rw-r--r-- 1 root root   1119 Aug 27 17:43 .env.example
+drwxr-xr-x 3 root root     23 Aug 27 17:46 .github
+-rw-r--r-- 1 root root 687003 Aug 27 18:59 JOB_BOARD_API_PROD_1.0.pdf
+-rw-r--r-- 1 root root   7783 Aug 27 17:47 README.md
+-rw-r--r-- 1 root root  19841 Aug 27 17:00 ai_components_design.md
+-rw-r--r-- 1 root root  10764 Aug 27 16:58 data_flow_diagram.md
+-rw-r--r-- 1 root root  16993 Aug 27 16:27 database_schema.md
+-rw-r--r-- 1 root root   3206 Aug 27 17:42 docker-compose.yml
+-rw-r--r-- 1 root root   5770 Aug 27 17:55 implementation_progress.md
+-rw-r--r-- 1 root root  11082 Aug 27 16:58 implementation_roadmap.md
+-rw-r--r-- 1 root root  34530 Aug 27 16:23 job_board_api.txt
+-rw-r--r-- 1 root root  12842 Aug 27 16:28 laboredge_api_integration.md
+-rw-r--r-- 1 root root  30953 Aug 27 17:04 marketing_automation_strategy.md
+drwxr-xr-x 2 root root   4096 Aug 27 23:34 outputs
+-rw-r--r-- 1 root root  12356 Aug 27 17:05 project_summary.md
+-rw-r--r-- 1 root root  24340 Aug 27 17:02 seo_strategy.md
+drwxr-xr-x 7 root root     81 Aug 27 17:08 src
+-rw-r--r-- 1 root root   6423 Aug 27 16:25 system_architecture.md
+-rw-r--r-- 1 root root   8105 Aug 27 16:56 technical_architecture_diagram.md
+-rw-r--r-- 1 root root   8691 Aug 27 23:30 todo.md
+-rw-r--r-- 1 root root      0 Aug 27 23:15 todo_backup.md
+drwxr-xr-x 2 root root   4096 Aug 27 16:56 wireframes

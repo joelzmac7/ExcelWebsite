@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Medical Staffing - Application Flow</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .logo span {
+            color: #3498db;
+        }
+        
+        .back-button {
+            color: #3498db;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .back-button:before {
+            content: '←';
+            margin-right: 5px;
+        }
+        
+        /* Application Flow Container */
+        .application-flow {
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 30px;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .progress-steps:before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            background-color: #f5f7fa;
+            padding: 0 5px;
+        }
+        
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 10px;
+        }
+        
+        .step-number.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .step-number.completed {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .step-label.active {
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .step-label.completed {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #3498db;
+            width: 25%; /* Will be updated based on step */
+        }
+        
+        /* Application Form Card */
+        .application-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .application-card h2 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .application-card p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .checkbox-group {
+            margin-bottom: 10px;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .form-note {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .form-error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        /* Resume Upload */
+        .resume-upload {
+            border: 2px dashed #ddd;
+            border-radius: 5px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .resume-upload:hover {
+            border-color: #3498db;
+        }
+        
+        .upload-icon {
+            font-size: 40px;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .upload-note {
+            font-size: 12px;
+            color: #95a5a6;
+        }
+        
+        .resume-preview {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .resume-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .resume-icon {
+            font-size: 24px;
+            color: #e74c3c;
+            margin-right: 10px;
+        }
+        
+        .resume-name {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .resume-size {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        .resume-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .resume-action {
+            color: #7f8c8d;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .resume-action:hover {
+            color: #3498db;
+        }
+        
+        /* Parsed Resume */
+        .parsed-resume {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .parsed-resume h3 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .parsed-section {
+            margin-bottom: 20px;
+        }
+        
+        .parsed-section h4 {
+            font-size: 16px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .parsed-section h4 i {
+            margin-right: 8px;
+            color: #3498db;
+        }
+        
+        .parsed-item {
+            margin-bottom: 15px;
+            padding-left: 25px;
+        }
+        
+        .parsed-item-title {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .parsed-item-subtitle {
+            color: #7f8c8d;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .parsed-item-date {
+            color: #95a5a6;
+            font-size: 12px;
+        }
+        
+        .edit-parsed {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        /* Job Matches */
+        .job-matches {
+            margin-bottom: 30px;
+        }
+        
+        .job-matches h3 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .match-card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .match-info {
+            flex: 1;
+        }
+        
+        .match-title {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .match-location {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .match-salary {
+            color: #3498db;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .match-score {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .match-score.high {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+        
+        /* License Verification */
+        .license-card {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .license-info {
+            flex: 1;
+        }
+        
+        .license-state {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .license-number {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .license-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .license-status.verified {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+        
+        .license-status.pending {
+            background-color: #fff8e1;
+            color: #f57c00;
+        }
+        
+        /* Form Navigation */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .nav-button {
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .prev-button {
+            background-color: #f1f1f1;
+            color: #7f8c8d;
+        }
+        
+        .prev-button:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .next-button {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .next-button:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Confirmation Page */
+        .confirmation-icon {
+            font-size: 60px;
+            color: #2ecc71;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .confirmation-title {
+            font-size: 24px;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .confirmation-message {
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .confirmation-details {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .confirmation-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        
+        .confirmation-detail:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .detail-label {
+            color: #7f8c8d;
+        }
+        
+        .detail-value {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .confirmation-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .confirmation-button {
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .primary-button {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .primary-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .secondary-button {
+            background-color: #f1f1f1;
+            color: #2c3e50;
+        }
+        
+        .secondary-button:hover {
+            background-color: #e0e0e0;
+        }
+        
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #3498db;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            z-index: 1000;
+        }
+        
+        .ai-assistant:hover {
+            transform: scale(1.1);
+            background-color: #2980b9;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .progress-steps {
+                margin-bottom: 15px;
+            }
+            
+            .step-label {
+                display: none;
+            }
+            
+            .application-card {
+                padding: 20px;
+            }
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="back-button">Back to Job</a>
+            <div class="logo">Excel <span>Medical Staffing</span></div>
+        </div>
+    </header>
+
+    <!-- Application Flow -->
+    <div class="container">
+        <div class="application-flow">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-steps">
+                    <div class="progress-step">
+                        <div class="step-number completed">✓</div>
+                        <div class="step-label completed">Upload Resume</div>
+                    </div>
+                    <div class="progress-step">
+                        <div class="step-number active">2</div>
+                        <div class="step-label active">Personal Info</div>
+                    </div>
+                    <div class="progress-step">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Experience</div>
+                    </div>
+                    <div class="progress-step">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Review</div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" style="width: 25%;"></div>
+                </div>
+            </div>
+            
+            <!-- Step 1: Resume Upload (Completed) -->
+            <div class="application-card" style="display: none;">
+                <h2>Upload Your Resume</h2>
+                <p>Upload your resume to automatically fill out your application. We support PDF, Word, and plain text formats.</p>
+                
+                <div class="resume-upload">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-text">Drag and drop your resume here or click to browse</div>
+                    <div class="upload-note">Maximum file size: 5MB</div>
+                </div>
+                
+                <div class="resume-preview">
+                    <div class="resume-info">
+                        <div class="resume-icon">📄</div>
+                        <div>
+                            <div class="resume-name">JohnDoe_Resume.pdf</div>
+                            <div class="resume-size">1.2 MB</div>
+                        </div>
+                    </div>
+                    <div class="resume-actions">
+                        <a href="#" class="resume-action">View</a>
+                        <a href="#" class="resume-action">Replace</a>
+                        <a href="#" class="resume-action">Remove</a>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <button class="nav-button prev-button" disabled>Previous</button>
+                    <button class="nav-button next-button">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Personal Information (Active) -->
+            <div class="application-card">
+                <h2>Personal Information</h2>
+                <p>Please review and complete your personal information below. Fields marked with * are required.</p>
+                
+                <div class="parsed-resume">
+                    <h3>Information from your resume</h3>
+                    <p>We've extracted the following information from your resume. Please verify and make any necessary corrections.</p>
+                    
+                    <a href="#" class="edit-parsed">Edit Parsed Information</a>
+                </div>
+                
+                <form>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" value="John" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" value="Doe" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" value="john.doe@example.com" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" value="(555) 123-4567" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="altPhone">Alternative Phone</label>
+                                <input type="tel" id="altPhone" name="altPhone">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Street Address *</label>
+                        <input type="text" id="address" name="address" value="123 Main Street" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="city">City *</label>
+                                <input type="text" id="city" name="city" value="San Francisco" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="state">State *</label>
+                                <select id="state" name="state" required>
+                                    <option value="">Select State</option>
+                                    <option value="CA" selected>California</option>
+                                    <option value="TX">Texas</option>
+                                    <option value="NY">New York</option>
+                                    <option value="FL">Florida</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="zip">ZIP Code *</label>
+                                <input type="text" id="zip" name="zip" value="94105" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Preferred Job Types *</label>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="jobType" value="travel" checked> Travel
+                            </label>
+                        </div>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="jobType" value="permanent"> Permanent
+                            </label>
+                        </div>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="jobType" value="per_diem"> Per Diem
+                            </label>
+                        </div>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="jobType" value="local"> Local
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="availability">Available Start Date *</label>
+                        <input type="date" id="availability" name="availability" value="2025-09-15" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Preferred States *</label>
+                        <select id="preferredStates" name="preferredStates" multiple required>
+                            <option value="CA" selected>California</option>
+                            <option value="TX">Texas</option>
+                            <option value="NY">New York</option>
+                            <option value="FL" selected>Florida</option>
+                            <option value="WA">Washington</option>
+                        </select>
+                        <div class="form-note">Hold Ctrl/Cmd to select multiple states</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="referralSource">How did you hear about us? *</label>
+                        <select id="referralSource" name="referralSource" required>
+                            <option value="">Select Option</option>
+                            <option value="search">Search Engine</option>
+                            <option value="social">Social Media</option>
+                            <option value="friend" selected>Friend/Colleague Referral</option>
+                            <option value="job_board">Job Board</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="referralName">Referral Name (if applicable)</label>
+                        <input type="text" id="referralName" name="referralName" value="Jane Smith">
+                    </div>
+                    
+                    <div class="form-navigation">
+                        <button class="nav-button prev-button">Previous</button>
+                        <button class="nav-button next-button">Next</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Step 3: Professional Experience (Hidden) -->
+            <div class="application-card" style="display: none;">
+                <h2>Professional Experience</h2>
+                <p>Please provide details about your professional experience, licenses, and certifications.</p>
+                
+                <form>
+                    <div class="form-group">
+                        <label for="profession">Profession *</label>
+                        <select id="profession" name="profession" required>
+                            <option value="">Select Profession</option>
+                            <option value="rn" selected>Registered Nurse (RN)</option>
+                            <option value="lpn">Licensed Practical Nurse (LPN)</option>
+                            <option value="cna">Certified Nursing Assistant (CNA)</option>
+                            <option value="pt">Physical Therapist (PT)</option>
+                            <option value="ot">Occupational Therapist (OT)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="specialty">Primary Specialty *</label>
+                        <select id="specialty" name="specialty" required>
+                            <option value="">Select Specialty</option>
+                            <option value="icu" selected>ICU</option>
+                            <option value="er">Emergency Room</option>
+                            <option value="med_surg">Med/Surg</option>
+                            <option value="or">Operating Room</option>
+                            <option value="l_d">Labor & Delivery</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Additional Specialties</label>
+                        <select id="additionalSpecialties" name="additionalSpecialties" multiple>
+                            <option value="icu">ICU</option>
+                            <option value="er" selected>Emergency Room</option>
+                            <option value="med_surg">Med/Surg</option>
+                            <option value="or">Operating Room</option>
+                            <option value="l_d">Labor & Delivery</option>
+                        </select>
+                        <div class="form-note">Hold Ctrl/Cmd to select multiple specialties</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="experience">Years of Experience *</label>
+                        <input type="number" id="experience" name="experience" min="0" step="0.5" value="5" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Licensed States *</label>
+                        <div class="license-card">
+                            <div class="license-info">
+                                <div class="license-state">California</div>
+                                <div class="license-number">RN12345678</div>
+                            </div>
+                            <div class="license-status verified">Verified</div>
+                        </div>
+                        <div class="license-card">
+                            <div class="license-info">
+                                <div class="license-state">Florida</div>
+                                <div class="license-number">RN87654321</div>
+                            </div>
+                            <div class="license-status pending">Pending</div>
+                        </div>
+                        <button class="nav-button prev-button" style="margin-top: 10px;">Add Another License</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Certifications</label>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="certification" value="bls" checked> BLS
+                            </label>
+                        </div>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="certification" value="acls" checked> ACLS
+                            </label>
+                        </div>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="certification" value="pals"> PALS
+                            </label>
+                        </div>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="certification" value="tncc" checked> TNCC
+                            </label>
+                        </div>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="certification" value="other"> Other
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="otherCerts">Other Certifications</label>
+                        <input type="text" id="otherCerts" name="otherCerts" placeholder="Please specify other certifications">
+                    </div>
+                    
+                    <div class="form-navigation">
+                        <button class="nav-button prev-button">Previous</button>
+                        <button class="nav-button next-button">Next</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Step 4: Review & Submit (Hidden) -->
+            <div class="application-card" style="display: none;">
+                <h2>Review & Submit</h2>
+                <p>Please review your application details before submitting. You can go back to make changes if needed.</p>
+                
+                <div class="job-matches">
+                    <h3>Top Job Matches</h3>
+                    <p>Based on your profile, we've found these top matches:</p>
+                    
+                    <div class="match-card">
+                        <div class="match-info">
+                            <div class="match-title">ICU Registered Nurse</div>
+                            <div class="match-location">San Francisco, CA</div>
+                            <div class="match-salary">$2,800 - $3,200/week</div>
+                        </div>
+                        <div class="match-score high">98% Match</div>
+                    </div>
+                    
+                    <div class="match-card">
+                        <div class="match-info">
+                            <div class="match-title">ICU Registered Nurse</div>
+                            <div class="match-location">Los Angeles, CA</div>
+                            <div class="match-salary">$2,700 - $3,100/week</div>
+                        </div>
+                        <div class="match-score high">95% Match</div>
+                    </div>
+                    
+                    <div class="match-card">
+                        <div class="match-info">
+                            <div class="match-title">ER Registered Nurse</div>
+                            <div class="match-location">Miami, FL</div>
+                            <div class="match-salary">$2,600 - $3,000/week</div>
+                        </div>
+                        <div class="match-score">85% Match</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="terms" required>
+                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="communications" checked>
+                        I would like to receive job alerts and other communications from Excel Medical Staffing
+                    </label>
+                </div>
+                
+                <div class="form-navigation">
+                    <button class="nav-button prev-button">Previous</button>
+                    <button class="nav-button next-button">Submit Application</button>
+                </div>
+            </div>
+            
+            <!-- Confirmation Page (Hidden) -->
+            <div class="application-card" style="display: none;">
+                <div class="confirmation-icon">✓</div>
+                <h2 class="confirmation-title">Application Submitted!</h2>
+                <p class="confirmation-message">Thank you for applying with Excel Medical Staffing. Your application has been received and is being reviewed by our team.</p>
+                
+                <div class="confirmation-details">
+                    <div class="confirmation-detail">
+                        <div class="detail-label">Application ID</div>
+                        <div class="detail-value">APP-2025-08-27-12345</div>
+                    </div>
+                    <div class="confirmation-detail">
+                        <div class="detail-label">Position</div>
+                        <div class="detail-value">ICU Registered Nurse</div>
+                    </div>
+                    <div class="confirmation-detail">
+                        <div class="detail-label">Location</div>
+                        <div class="detail-value">San Francisco, CA</div>
+                    </div>
+                    <div class="confirmation-detail">
+                        <div class="detail-label">Submitted On</div>
+                        <div class="detail-value">August 27, 2025</div>
+                    </div>
+                </div>
+                
+                <div class="confirmation-actions">
+                    <a href="#" class="confirmation-button primary-button">View Application Status</a>
+                    <a href="#" class="confirmation-button secondary-button">Browse More Jobs</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant Button -->
+    <div class="ai-assistant">
+        💬
+    </div>
+</body>
+</html>

@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Medical Staffing - Recruiter Portal</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .logo span {
+            color: #3498db;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-name {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-right: 5px;
+        }
+        
+        .dropdown-icon {
+            color: #7f8c8d;
+        }
+        
+        /* Dashboard Layout */
+        .dashboard {
+            display: flex;
+            padding: 30px 0;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-right: 30px;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu-item {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 5px;
+            color: #7f8c8d;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .sidebar-menu-link:hover {
+            background-color: #f5f7fa;
+            color: #3498db;
+        }
+        
+        .sidebar-menu-link.active {
+            background-color: #e3f2fd;
+            color: #3498db;
+            font-weight: 500;
+        }
+        
+        .sidebar-menu-icon {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .sidebar-divider {
+            height: 1px;
+            background-color: #f1f1f1;
+            margin: 15px 0;
+        }
+        
+        .sidebar-heading {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #95a5a6;
+            font-weight: bold;
+            margin: 15px 0 10px;
+            padding: 0 15px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+        }
+        
+        /* Dashboard Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-title {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+        
+        .dashboard-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .dashboard-action {
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .primary-action {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .primary-action:hover {
+            background-color: #2980b9;
+        }
+        
+        .secondary-action {
+            background-color: #f1f1f1;
+            color: #7f8c8d;
+        }
+        
+        .secondary-action:hover {
+            background-color: #e0e0e0;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+        
+        .stat-title {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .stat-change {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .stat-change.positive {
+            color: #2ecc71;
+        }
+        
+        .stat-change.negative {
+            color: #e74c3c;
+        }
+        
+        .stat-change-icon {
+            margin-right: 5px;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #f1f1f1;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 15px 20px;
+            font-weight: 500;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .tab:hover {
+            color: #3498db;
+        }
+        
+        .tab.active {
+            color: #3498db;
+        }
+        
+        .tab.active:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #3498db;
+        }
+        
+        .tab-badge {
+            display: inline-block;
+            background-color: #f1f1f1;
+            color: #7f8c8d;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        
+        /* Filters */
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .filter-select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0 15px;
+            background-color: white;
+        }
+        
+        .search-icon {
+            color: #7f8c8d;
+            margin-right: 10px;
+        }
+        
+        .search-input {
+            border: none;
+            padding: 10px 0;
+            font-size: 14px;
+            color: #2c3e50;
+            width: 200px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+        }
+        
+        /* Table */
+        .table-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th {
+            background-color: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 500;
+            color: #7f8c8d;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .data-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .candidate-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .candidate-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+        
+        .candidate-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .candidate-name {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 3px;
+        }
+        
+        .candidate-title {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-new {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .status-contacted {
+            background-color: #fff8e1;
+            color: #f57c00;
+        }
+        
+        .status-interviewing {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+        
+        .status-placed {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .table-action {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .table-action:hover {
+            background-color: #f1f1f1;
+            color: #3498db;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .pagination-info {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .pagination-controls {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .pagination-button {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .pagination-button:hover {
+            background-color: #f1f1f1;
+            color: #3498db;
+        }
+        
+        .pagination-button.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        /* Job Sharing */
+        .job-sharing-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .job-sharing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .job-sharing-title {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .job-sharing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .shareable-job-card {
+            border: 1px solid #f1f1f1;
+            border-radius: 5px;
+            padding: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .shareable-job-card:hover {
+            border-color: #3498db;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .shareable-job-title {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .shareable-job-location {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .shareable-job-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .shareable-job-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-number {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 3px;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+        
+        .shareable-job-link {
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            border: 1px solid #f1f1f1;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .shareable-link-text {
+            flex: 1;
+            font-size: 12px;
+            color: #7f8c8d;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .copy-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .copy-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .shareable-job-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .shareable-job-action {
+            flex: 1;
+            padding: 8px 0;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .action-share {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .action-share:hover {
+            background-color: #2980b9;
+        }
+        
+        .action-qr {
+            background-color: #f1f1f1;
+            color: #7f8c8d;
+        }
+        
+        .action-qr:hover {
+            background-color: #e0e0e0;
+        }
+        
+        /* Referral Tracking */
+        .referral-tracking-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .referral-tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .referral-tracking-title {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .referral-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .referral-stat {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            flex: 1;
+        }
+        
+        .referral-stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .referral-stat-label {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 30px;
+            }
+            
+            .job-sharing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 20px 0;
+            }
+            
+            .user-menu {
+                margin-top: 15px;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .dashboard-actions {
+                margin-top: 15px;
+                width: 100%;
+            }
+            
+            .dashboard-action {
+                flex: 1;
+                text-align: center;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-group {
+                margin-bottom: 15px;
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            
+            .filter-select {
+                flex: 1;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 5px;
+            }
+            
+            .referral-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Excel <span>Medical Staffing</span></div>
+            <div class="user-menu">
+                <div class="user-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Sarah Johnson">
+                </div>
+                <span class="user-name">Sarah Johnson</span>
+                <span class="dropdown-icon">▼</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard -->
+    <div class="container dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link active">
+                        <span class="sidebar-menu-icon">📊</span>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <span class="sidebar-menu-icon">👥</span>
+                        Candidates
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <span class="sidebar-menu-icon">💼</span>
+                        Jobs
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <span class="sidebar-menu-icon">🔗</span>
+                        Job Sharing
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <span class="sidebar-menu-icon">👋</span>
+                        Referrals
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="sidebar-divider"></div>
+            
+            <h3 class="sidebar-heading">Communications</h3>
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <span class="sidebar-menu-icon">✉️</span>
+                        Messages
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <span class="sidebar-menu-icon">📱</span>
+                        SMS
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <span class="sidebar-menu-icon">📅</span>
+                        Calendar
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="sidebar-divider"></div>
+            
+            <h3 class="sidebar-heading">Reports</h3>
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <span class="sidebar-menu-icon">📈</span>
+                        Performance
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <span class="sidebar-menu-icon">📊</span>
+                        Analytics
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="sidebar-divider"></div>
+            
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <span class="sidebar-menu-icon">⚙️</span>
+                        Settings
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <span class="sidebar-menu-icon">❓</span>
+                        Help & Support
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Recruiter Dashboard</h1>
+                <div class="dashboard-actions">
+                    <a href="#" class="dashboard-action secondary-action">Import Candidates</a>
+                    <a href="#" class="dashboard-action primary-action">Add Candidate</a>
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title">Active Candidates</div>
+                    <div class="stat-value">128</div>
+                    <div class="stat-change positive">
+                        <span class="stat-change-icon">↑</span> 12% from last month
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">Placements (MTD)</div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-change positive">
+                        <span class="stat-change-icon">↑</span> 8% from last month
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">Referrals</div>
+                    <div class="stat-value">37</div>
+                    <div class="stat-change positive">
+                        <span class="stat-change-icon">↑</span> 15% from last month
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">Job Share Clicks</div>
+                    <div class="stat-value">256</div>
+                    <div class="stat-change positive">
+                        <span class="stat-change-icon">↑</span> 23% from last month
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Candidates Table -->
+            <div class="tabs">
+                <div class="tab active">All Candidates <span class="tab-badge">128</span></div>
+                <div class="tab">New Applications <span class="tab-badge">18</span></div>
+                <div class="tab">In Process <span class="tab-badge">42</span></div>
+                <div class="tab">Placed <span class="tab-badge">24</span></div>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <select class="filter-select">
+                        <option value="">All Specialties</option>
+                        <option value="rn_icu">RN - ICU</option>
+                        <option value="rn_er">RN - ER</option>
+                        <option value="rn_med_surg">RN - Med/Surg</option>
+                        <option value="pt">Physical Therapist</option>
+                        <option value="ot">Occupational Therapist</option>
+                    </select>
+                    
+                    <select class="filter-select">
+                        <option value="">All Locations</option>
+                        <option value="ca">California</option>
+                        <option value="tx">Texas</option>
+                        <option value="fl">Florida</option>
+                        <option value="ny">New York</option>
+                    </select>
+                    
+                    <select class="filter-select">
+                        <option value="">All Statuses</option>
+                        <option value="new">New</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="interviewing">Interviewing</option>
+                        <option value="placed">Placed</option>
+                    </select>
+                </div>
+                
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Search candidates...">
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Candidate</th>
+                            <th>Specialty</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Source</th>
+                            <th>Last Activity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="candidate-info">
+                                    <div class="candidate-avatar">
+                                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Jennifer Lee">
+                                    </div>
+                                    <div>
+                                        <div class="candidate-name">Jennifer Lee</div>
+                                        <div class="candidate-title">RN - ICU</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>ICU</td>
+                            <td>San Francisco, CA</td>
+                            <td><span class="status-badge status-new">New</span></td>
+                            <td>Job Board</td>
+                            <td>Aug 26, 2025</td>
+                            <td>
+                                <div class="table-actions">
+                                    <a href="#" class="table-action">📝</a>
+                                    <a href="#" class="table-action">✉️</a>
+                                    <a href="#" class="table-action">📱</a>
+                                    <a href="#" class="table-action">⋯</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="candidate-info">
+                                    <div class="candidate-avatar">
+                                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Rodriguez">
+                                    </div>
+                                    <div>
+                                        <div class="candidate-name">Michael Rodriguez</div>
+                                        <div class="candidate-title">Physical Therapist</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Physical Therapy</td>
+                            <td>Los Angeles, CA</td>
+                            <td><span class="status-badge status-contacted">Contacted</span></td>
+                            <td>Referral</td>
+                            <td>Aug 25, 2025</td>
+                            <td>
+                                <div class="table-actions">
+                                    <a href="#" class="table-action">📝</a>
+                                    <a href="#" class="table-action">✉️</a>
+                                    <a href="#" class="table-action">📱</a>
+                                    <a href="#" class="table-action">⋯</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="candidate-info">
+                                    <div class="candidate-avatar">
+                                        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sarah Thompson">
+                                    </div>
+                                    <div>
+                                        <div class="candidate-name">Sarah Thompson</div>
+                                        <div class="candidate-title">RN - ER</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Emergency Room</td>
+                            <td>Houston, TX</td>
+                            <td><span class="status-badge status-interviewing">Interviewing</span></td>
+                            <td>Job Share</td>
+                            <td>Aug 24, 2025</td>
+                            <td>
+                                <div class="table-actions">
+                                    <a href="#" class="table-action">📝</a>
+                                    <a href="#" class="table-action">✉️</a>
+                                    <a href="#" class="table-action">📱</a>
+                                    <a href="#" class="table-action">⋯</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="candidate-info">
+                                    <div class="candidate-avatar">
+                                        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="David Wilson">
+                                    </div>
+                                    <div>
+                                        <div class="candidate-name">David Wilson</div>
+                                        <div class="candidate-title">Occupational Therapist</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Occupational Therapy</td>
+                            <td>Miami, FL</td>
+                            <td><span class="status-badge status-placed">Placed</span></td>
+                            <td>Direct</td>
+                            <td>Aug 23, 2025</td>
+                            <td>
+                                <div class="table-actions">
+                                    <a href="#" class="table-action">📝</a>
+                                    <a href="#" class="table-action">✉️</a>
+                                    <a href="#" class="table-action">📱</a>
+                                    <a href="#" class="table-action">⋯</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="candidate-info">
+                                    <div class="candidate-avatar">
+                                        <img src="https://randomuser.me/api/portraits/women/22.jpg" alt="Emily Johnson">
+                                    </div>
+                                    <div>
+                                        <div class="candidate-name">Emily Johnson</div>
+                                        <div class="candidate-title">RN - L&D</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Labor & Delivery</td>
+                            <td>Chicago, IL</td>
+                            <td><span class="status-badge status-new">New</span></td>
+                            <td>Job Board</td>
+                            <td>Aug 22, 2025</td>
+                            <td>
+                                <div class="table-actions">
+                                    <a href="#" class="table-action">📝</a>
+                                    <a href="#" class="table-action">✉️</a>
+                                    <a href="#" class="table-action">📱</a>
+                                    <a href="#" class="table-action">⋯</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination">
+                <div class="pagination-info">Showing 1 to 5 of 128 entries</div>
+                <div class="pagination-controls">
+                    <a href="#" class="pagination-button">«</a>
+                    <a href="#" class="pagination-button active">1</a>
+                    <a href="#" class="pagination-button">2</a>
+                    <a href="#" class="pagination-button">3</a>
+                    <a href="#" class="pagination-button">4</a>
+                    <a href="#" class="pagination-button">5</a>
+                    <a href="#" class="pagination-button">»</a>
+                </div>
+            </div>
+            
+            <!-- Job Sharing -->
+            <div class="job-sharing-card">
+                <div class="job-sharing-header">
+                    <h2 class="job-sharing-title">Job Sharing</h2>
+                    <a href="#" class="dashboard-action secondary-action">View All</a>
+                </div>
+                
+                <div class="job-sharing-grid">
+                    <!-- Shareable Job 1 -->
+                    <div class="shareable-job-card">
+                        <div class="shareable-job-title">ICU Registered Nurse</div>
+                        <div class="shareable-job-location">San Francisco, CA</div>
+                        <div class="shareable-job-stats">
+                            <div class="shareable-job-stat">
+                                <div class="stat-number">86</div>
+                                <div class="stat-label">Views</div>
+                            </div>
+                            <div class="shareable-job-stat">
+                                <div class="stat-number">12</div>
+                                <div class="stat-label">Applications</div>
+                            </div>
+                            <div class="shareable-job-stat">
+                                <div class="stat-number">3</div>
+                                <div class="stat-label">Placements</div>
+                            </div>
+                        </div>
+                        <div class="shareable-job-link">
+                            <div class="shareable-link-text">https://excelmedical.com/jobs/icu-rn-sf?ref=sjohnson</div>
+                            <button class="copy-button">Copy</button>
+                        </div>
+                        <div class="shareable-job-actions">
+                            <a href="#" class="shareable-job-action action-share">Share</a>
+                            <a href="#" class="shareable-job-action action-qr">QR Code</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Shareable Job 2 -->
+                    <div class="shareable-job-card">
+                        <div class="shareable-job-title">ER Registered Nurse</div>
+                        <div class="shareable-job-location">Houston, TX</div>
+                        <div class="shareable-job-stats">
+                            <div class="shareable-job-stat">
+                                <div class="stat-number">72</div>
+                                <div class="stat-label">Views</div>
+                            </div>
+                            <div class="shareable-job-stat">
+                                <div class="stat-number">9</div>
+                                <div class="stat-label">Applications</div>
+                            </div>
+                            <div class="shareable-job-stat">
+                                <div class="stat-number">2</div>
+                                <div class="stat-label">Placements</div>
+                            </div>
+                        </div>
+                        <div class="shareable-job-link">
+                            <div class="shareable-link-text">https://excelmedical.com/jobs/er-rn-houston?ref=sjohnson</div>
+                            <button class="copy-button">Copy</button>
+                        </div>
+                        <div class="shareable-job-actions">
+                            <a href="#" class="shareable-job-action action-share">Share</a>
+                            <a href="#" class="shareable-job-action action-qr">QR Code</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Shareable Job 3 -->
+                    <div class="shareable-job-card">
+                        <div class="shareable-job-title">Physical Therapist</div>
+                        <div class="shareable-job-location">Chicago, IL</div>
+                        <div class="shareable-job-stats">
+                            <div class="shareable-job-stat">
+                                <div class="stat-number">54</div>
+                                <div class="stat-label">Views</div>
+                            </div>
+                            <div class="shareable-job-stat">
+                                <div class="stat-number">7</div>
+                                <div class="stat-label">Applications</div>
+                            </div>
+                            <div class="shareable-job-stat">
+                                <div class="stat-number">1</div>
+                                <div class="stat-label">Placements</div>
+                            </div>
+                        </div>
+                        <div class="shareable-job-link">
+                            <div class="shareable-link-text">https://excelmedical.com/jobs/pt-chicago?ref=sjohnson</div>
+                            <button class="copy-button">Copy</button>
+                        </div>
+                        <div class="shareable-job-actions">
+                            <a href="#" class="shareable-job-action action-share">Share</a>
+                            <a href="#" class="shareable-job-action action-qr">QR Code</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Referral Tracking -->
+            <div class="referral-tracking-card">
+                <div class="referral-tracking-header">
+                    <h2 class="referral-tracking-title">Referral Tracking</h2>
+                    <a href="#" class="dashboard-action secondary-action">View All</a>
+                </div>
+                
+                <div class="referral-stats">
+                    <div class="referral-stat">
+                        <div class="referral-stat-value">37</div>
+                        <div class="referral-stat-label">Total Referrals</div>
+                    </div>
+                    <div class="referral-stat">
+                        <div class="referral-stat-value">24</div>
+                        <div class="referral-stat-label">Registered</div>
+                    </div>
+                    <div class="referral-stat">
+                        <div class="referral-stat-value">18</div>
+                        <div class="referral-stat-label">Applied</div>
+                    </div>
+                    <div class="referral-stat">
+                        <div class="referral-stat-value">9</div>
+                        <div class="referral-stat-label">Placed</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Referrer</th>
+                                <th>Referred</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Job</th>
+                                <th>Bonus</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Jennifer Lee</td>
+                                <td>Robert Chen</td>
+                                <td>Aug 24, 2025</td>
+                                <td><span class="status-badge status-placed">Placed</span></td>
+                                <td>ICU RN - San Francisco</td>
+                                <td>$1,000</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <a href="#" class="table-action">📝</a>
+                                        <a href="#" class="table-action">✉️</a>
+                                        <a href="#" class="table-action">⋯</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Michael Rodriguez</td>
+                                <td>Sarah Thompson</td>
+                                <td>Aug 22, 2025</td>
+                                <td><span class="status-badge status-interviewing">Interviewing</span></td>
+                                <td>ER RN - Houston</td>
+                                <td>Pending</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <a href="#" class="table-action">📝</a>
+                                        <a href="#" class="table-action">✉️</a>
+                                        <a href="#" class="table-action">⋯</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>David Wilson</td>
+                                <td>Emily Johnson</td>
+                                <td>Aug 20, 2025</td>
+                                <td><span class="status-badge status-new">Registered</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <a href="#" class="table-action">📝</a>
+                                        <a href="#" class="table-action">✉️</a>
+                                        <a href="#" class="table-action">⋯</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

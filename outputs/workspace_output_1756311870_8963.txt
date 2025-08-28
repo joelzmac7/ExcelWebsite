@@ -1,0 +1,51 @@
+     "linkedin":"linkedin.lofitest.com",
+      “other”:”others.com”
+}
+
+INPUT NOTES:
+1. Required Fields – firstName, lastName, statusId, referralSourceId, professionIds, specialtyIds, primarySpecialtyId, stateId, countryId,
+jobTypeIds.
+2. johTypeIds - can have values "LOCAL", "PERDIEM", "PERM", "TRAVEL".
+3. specialtyIds and pimarySpecialtyId if any should belong to one of the professionIds in the request.
+4. licensedStateIds – inserts into candidate professional license any missing combination of licensedStateIds and professionIds. No inserts id
+licensedStateIds are empty or null.
+5. statusId – will not be updated if null
+6. phone – this field is mapped to home phone in nexus
+7. In Nexus candidate details, Cell Phone is marked as primary phone if its not null else it is defaulted to
+OUTPUT:
+
+ {
+     "id": 5841569
+ }
+
+
+
+
+13. UPDATE CANDIDATE
+
+URL: https://api-nexus.laboredge.com:9000/api/api-integration/v1/candidates/{candidateId}
+note: {candidateId} is to be replaced with the id of the candidate in the system.
+METHOD: PUT
+HEADER: Authorization: Bearer <access_token>
+INPUT: JSON Object
+
+ {
+  "firstName": "JohnQ",
+  "lastName": "DoeQ",
+  "email": "johndoQe@example.com",
+  "phone": "123-455-7890",
+  "cellPhone": "987-464-3210",
+  "statusId": 1,
+  "referralSourceId": 2,
+  "professionIds": [15],
+  "specialtyIds": [24],
+  "primarySpecialtyId": 24,
+  "jobTypeIds": [
+     "PERM",
+     "TRAVEL",
+     "PERDIEM",
+     "LOCAL"
+  ],
+  "addressLine1": "123 Main St",
+  "addressLine2": "Apt 456",
+  "stateId": null,

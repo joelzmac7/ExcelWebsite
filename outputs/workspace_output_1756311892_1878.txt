@@ -1,0 +1,101 @@
+           "AWHONN",
+           "CBIS"
+],
+"rates": [
+           {
+                    "billRateCodeId": "BR_REGULAR_BILL_RATE",
+                    "billRateCode": "Regular Bill Rate",
+                  "rate": 88.0
+        },
+        {
+                  "billRateCodeId": "BR_GREATER_THAN_EIGHT",
+                  "billRateCode": ">8 Bill Rate",
+                  "rate": 132.0
+        },
+        {
+                  "billRateCodeId": "BR_GREATER_THAN_FOURTY",
+                  "billRateCode": ">40 Bill Rate",
+                  "rate": 132.0
+        },
+        {
+                  "billRateCodeId": "BR_HOLIDAY_RATE",
+                  "billRateCode": "Holiday Bill Rate",
+                                                    "rate": 132.0
+                                         }
+                               ],
+                               "week1Gross": "$1695.37",
+                               "nexusClientId": 3460,
+                               "availableOpenings": null,
+                               "postedBy": "Ketan Potale",
+                               "vmsFee": 12.0,
+                               "length": 13,
+                               "additionalInformation": "",
+                               "department": null,
+                               "departmentId": null,
+                               "offeringId": "NURSING",
+                               "subOfferingId": null,
+                               "workersCompCode": null,
+                               "lodgingAmount": 685.99,
+                               "mealAmount": 369.3800000000001,
+                               "hourlyStipendRate": 26.38,
+                               "featuredJob": true,
+                               "positionUrgencyId": "NORMAL",
+                               "positionUrgency": "Normal",
+                               "nonBillableHrs": 21.0,
+                               "billableHrs": 17.0,
+                               "billablePercent": 45.0,
+                               "weeklyPay": 1695.37,
+                               "hourlyPay": 42.38,
+                               "hourlyPayRange": "$32.38 - $42.38",
+                               "weeklyPayRange": "$1670.37 - $1695.37"
+                    },
+                    {
+                                "id": 107214,
+                                "jobTitle": null,
+                                "postingId": null,
+                                "displayOnExternalJobBoard": true,
+                                "description": "Registered nurses fulfill a variety of job duties. In addition to the primary role in treating
+and caring for patients, their responsibilities also include educating patients and the public about a variety of medical conditions, as
+well as providing emotional support and advice to the families of their patients. Other RN job functions include performing
+diagnostic tests and analyzing results, administering medications, operating medical equipment, recording patients’ symptoms and
+medical histories, and assisting with patient rehabilitation and follow-up.",
+                               "postedDate": "2023-08-10T14:14:36Z",
+                               "preferredCertifications": "",
+                               "signOnBonus": null,
+                               "noOfOpenings": 1,
+                               "jobType": "Travel",
+                               "msa": false,
+                               "startDate": "2023-08-10",
+                               "endDate": "2023-11-04",
+                               "asap": true,
+                               "duration": 13,
+                               "durationType": "WEEKS",
+                               "jobStatusId": 43,
+                               "jobStatus": "Open",
+                               "jobStatusCode": "OPEN",
+"jobHotJob": true,
+"floatingReqUnits": "Float to areas of Competency. 123",
+"positionType": null,
+"shiftStartTime1": "08:00:00",
+"shiftEndTime1": "16:00:00",
+"shiftStartTime2": null,
+"shiftEndTime2": null,
+"shiftsPerWeek1": 5,
+"scheduledHrs1": 40.0,
+"shiftsPerWeek2": null,
+"scheduledHrs2": null,
+"shift": "8 AM - 4 PM ( This is a regular 8 hour shift. ) ",
+"title": "RN:ICU,08:00:00-16:00:00",
+"offering": "Nursing",
+"subOffering": null,
+"professionId": 15,
+"specialtyId": 25,
+"profession": "RN",
+"specialty": "ICU",
+"salesRepId": 3926,
+"saleRepFirstName": "test",
+"saleRepLastName": "Patil",
+"saleRepEmail": "dpatil@yopmail.com",
+"staffingSpecialistId": 80,
+"staffingSpecialistFirstName": "Tina",
+"staffingSpecialistLastName": "Mihic",

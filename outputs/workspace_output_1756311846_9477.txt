@@ -1,0 +1,30 @@
+
+URL:https://api-nexus.laboredge.com:9000/api/job-service/v1/ats/external/jobs/search
+METHOD: POST
+HEADER:
+    Key                                                                 Value
+    Authorization                                                       Bearer <jwt_access_token_of_oauth_api>
+
+INPUT: JSON Object
+
+{
+     "jobStatusCode": "OPEN",
+     "startDateFrom": "2021-02-15",
+     "startDateTo": "2021-03-15",
+     "endDateFrom": "2021-06-02",
+     "endDateTo": "2021-06-30",
+     "professionIds" :[269, 281],
+     "specialtyIds": [1640, 1664],
+     "stateIds": [4263, 4267],
+     "jobId": 8585,
+     "dateCreatedStart": "2022-08-25T16:55:29",
+     "dateCreatedEnd": "2022-08-30T22:15:05",
+     "dateModifiedStart":"2022-08-25T16:55:29",
+     "dateModifiedEnd":"2022-08-30T22:15:05",
+     "pagingDetails":{"start":0},
+     "hotJob": true,
+     "postingId": "outpatient need",
+     “staffingSpecialistIds”: [80, 3788],
+     “externalJobPostingId”: “123456”
+}
+

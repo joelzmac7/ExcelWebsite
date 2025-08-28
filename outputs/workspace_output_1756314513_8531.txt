@@ -1,0 +1,8 @@
+total 4
+drwxr-xr-x 7 root root   81 Aug 27 17:08 .
+drwxr-xr-x 5 root root 4096 Aug 27 17:08 ..
+drwxr-xr-x 6 root root   94 Aug 27 17:08 ai
+drwxr-xr-x 6 root root   60 Aug 27 17:08 backend
+drwxr-xr-x 5 root root   56 Aug 27 17:08 docs
+drwxr-xr-x 6 root root   64 Aug 27 17:08 frontend
+drwxr-xr-x 5 root root   54 Aug 27 17:08 infrastructure

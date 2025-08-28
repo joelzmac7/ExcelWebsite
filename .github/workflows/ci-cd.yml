@@ -1,0 +1,204 @@
+name: Excel Medical Staffing CI/CD
+
+on:
+  push:
+    branches: [ main, development ]
+  pull_request:
+    branches: [ main, development ]
+
+jobs:
+  lint-and-test-backend:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: './src/backend/package-lock.json'
+    
+    - name: Install dependencies
+      working-directory: ./src/backend
+      run: npm ci
+    
+    - name: Lint
+      working-directory: ./src/backend
+      run: npm run lint
+    
+    - name: Generate Prisma client
+      working-directory: ./src/backend
+      run: npx prisma generate
+    
+    - name: Run tests
+      working-directory: ./src/backend
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+        REDIS_URL: redis://localhost:6379
+        NODE_ENV: test
+        JWT_SECRET: test_secret
+      run: npm test
+
+  lint-and-test-frontend:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: './src/frontend/package-lock.json'
+    
+    - name: Install dependencies
+      working-directory: ./src/frontend
+      run: npm ci
+    
+    - name: Lint
+      working-directory: ./src/frontend
+      run: npm run lint
+    
+    - name: Build
+      working-directory: ./src/frontend
+      run: npm run build
+    
+    - name: Run tests
+      working-directory: ./src/frontend
+      run: npm test
+
+  lint-and-test-ai-services:
+    runs-on: ubuntu-latest
+    
+    services:
+      mongodb:
+        image: mongo:5
+        env:
+          MONGO_INITDB_ROOT_USERNAME: mongodb
+          MONGO_INITDB_ROOT_PASSWORD: mongodb
+        ports:
+          - 27017:27017
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: './src/ai/package-lock.json'
+    
+    - name: Install dependencies
+      working-directory: ./src/ai
+      run: npm ci
+    
+    - name: Lint
+      working-directory: ./src/ai
+      run: npm run lint
+    
+    - name: Run tests
+      working-directory: ./src/ai
+      env:
+        MONGODB_URI: mongodb://mongodb:mongodb@localhost:27017/test_db?authSource=admin
+        NODE_ENV: test
+      run: npm test
+
+  build-and-push:
+    needs: [lint-and-test-backend, lint-and-test-frontend, lint-and-test-ai-services]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    
+    - name: Build and push backend
+      uses: docker/build-push-action@v4
+      with:
+        context: ./src/backend
+        file: ./src/backend/Dockerfile
+        push: true
+        tags: excelmedicalsolutions/backend:latest
+    
+    - name: Build and push frontend
+      uses: docker/build-push-action@v4
+      with:
+        context: ./src/frontend
+        file: ./src/frontend/Dockerfile
+        push: true
+        tags: excelmedicalsolutions/frontend:latest
+    
+    - name: Build and push AI services
+      uses: docker/build-push-action@v4
+      with:
+        context: ./src/ai
+        file: ./src/ai/Dockerfile
+        push: true
+        tags: excelmedicalsolutions/ai-services:latest
+
+  deploy:
+    needs: build-and-push
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.25.0'
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-2
+    
+    - name: Update kubeconfig
+      run: aws eks update-kubeconfig --name excel-medical-cluster --region us-west-2
+    
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f ./src/infrastructure/kubernetes/production
+        kubectl rollout restart deployment/backend-deployment
+        kubectl rollout restart deployment/frontend-deployment
+        kubectl rollout restart deployment/ai-services-deployment

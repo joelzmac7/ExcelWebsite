@@ -1,0 +1,126 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database for structured data
+  postgres:
+    image: postgres:14
+    container_name: excel-postgres
+    environment:
+      POSTGRES_USER: excel
+      POSTGRES_PASSWORD: excel_password
+      POSTGRES_DB: excel_medical
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U excel"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MongoDB for unstructured data (resumes, chat logs, etc.)
+  mongodb:
+    image: mongo:5
+    container_name: excel-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: excel
+      MONGO_INITDB_ROOT_PASSWORD: excel_password
+      MONGO_INITDB_DATABASE: excel_medical
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/excel_medical --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: excel-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API service
+  backend:
+    build:
+      context: ./src/backend
+      dockerfile: Dockerfile.dev
+    container_name: excel-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://excel:excel_password@postgres:5432/excel_medical
+      MONGODB_URI: mongodb://excel:excel_password@mongodb:27017/excel_medical
+      REDIS_URL: redis://redis:6379
+      PORT: 4000
+      LABOREDGE_API_BASE_URL: https://api.laboredge.com
+      LABOREDGE_USERNAME: ${LABOREDGE_USERNAME:-API_Excel_User}
+      LABOREDGE_PASSWORD: ${LABOREDGE_PASSWORD:-API@EXCEL_03262025}
+      LABOREDGE_ORG_CODE: ${LABOREDGE_ORG_CODE:-Excel}
+      JWT_SECRET: ${JWT_SECRET:-development_jwt_secret_key}
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./src/backend:/app
+      - /app/node_modules
+    command: npm run dev
+
+  # Frontend service
+  frontend:
+    build:
+      context: ./src/frontend
+      dockerfile: Dockerfile.dev
+    container_name: excel-frontend
+    depends_on:
+      - backend
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:4000
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src/frontend:/app
+      - /app/node_modules
+    command: npm run dev
+
+  # AI services
+  ai-services:
+    build:
+      context: ./src/ai
+      dockerfile: Dockerfile.dev
+    container_name: excel-ai-services
+    depends_on:
+      - backend
+    environment:
+      NODE_ENV: development
+      API_URL: http://backend:4000
+      MONGODB_URI: mongodb://excel:excel_password@mongodb:27017/excel_medical
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src/ai:/app
+      - /app/node_modules
+    command: npm run dev
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  redis_data:

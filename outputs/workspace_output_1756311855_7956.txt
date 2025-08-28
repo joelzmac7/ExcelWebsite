@@ -1,0 +1,50 @@
+          12. INSERT CANDIDATE
+
+          13. UPDATE CANDIDATE
+
+          14. GET CANDIDATES
+
+          15. GET CANDIDATE BY CANDIDATE ID
+
+
+
+
+1. OAUTH AUTHENTICATION API
+
+URL: https://api-nexus.laboredge.com:9000/api/secured/oauth/token
+METHOD: POST
+HEADER:
+
+ Key                                                            Value
+ Content-Type                                                   application/x-www-form-urlencoded
+ Authorization                                                  Basic dm1zOnZtc1NlY3JldCMk
+
+
+INPUT:
+         consumes: application/x-www-form-urlencoded
+         parameters:
+
+                      Key                       Value
+                      username                  <LE will provide this>
+                      password                  <LE will provide this>
+                  client_id             <LE will provide this>
+                  grant_type            <LE will provide this>
+                  organizationCode      <LE will provide this>
+
+
+
+Postman Example
+
+
+
+
+OUTPUT (JSON):
+
+{
+"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsYXN0TmFtZSI6IlRyYWluaW5nIiwiY2xpZW50SWQiOm51bGws
+InVzZXJfbmFtZSI6IkdIUiIsImFnZW5jeUlkIjoxNjEsInVzZXJJZCI6MjE3NCwiYXV0aG9yaXRpZXMiOlsiQVRTX0FHRU5DWS
+JdLCJjbGllbnRfaWQiOiJ2bXMiLCJvcmdhbml6YXRpb25JZCI6ODUsIm9yZ2FuaXphdGlvblR5cGUiOiJBVFMiLCJmaXJzdE5hb
+WUiOiJHSFIiLCJvcmdhbml6YXRpb25Db2RlIjoiR0hSIiwiYXBwbGljYXRpb25UeXBlSWQiOiJBVFNfQUdFTkNZIiwib3JnYW5
+pemF0aW9uSWRlbnRpZmllciI6IkdIUiIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJvcmdhbml6YXRpb25Db3VudHJ5SWQiOjg3L
+CJleHAiOjE2MTUzNzUwMzksImNhbmRpZGF0ZUlkIjpudWxsLCJqdGkiOiI0YjI0YjQ0NC0zZjYzLTRmNmMtODY5ZS1jNTgx
+NWE1OTFkZjMiLCJlbWFpbCI6IkdIUkBsYWJvcmVkZ2UuY29tIn0.xqQeab-
